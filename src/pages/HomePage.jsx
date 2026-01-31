@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // <--- 1. Import cái này để chuyển trang
 
-/* LƯU Ý: Đảm bảo bạn vẫn giữ các hình ảnh này trong thư mục image
-   như cũ nhé. Nếu tên file khác thì sửa lại dòng import này.
-*/
+/* LƯU Ý: Đảm bảo bạn vẫn giữ các hình ảnh này trong thư mục image */
 import glassesImg from "../image/img1.png";
-import glassesImg1 from "../image/images.jpg"; // Hình này nếu không dùng thì có thể xóa
+import glassesImg1 from "../image/images.jpg";
 import glassesImg2 from "../image/getty-images-t00PsxNOJrg-unsplash.jpg";
+import { Link } from 'react-router-dom';
 
 /* ===== DATA SLIDER (Banner chính) ===== */
 const sliderData = [
@@ -29,8 +29,7 @@ const sliderData = [
   },
 ];
 
-/* ===== DATA SẢN PHẨM NỔI BẬT (MỚI THÊM) ===== */
-// Tạm thời dùng link ảnh online cho đẹp, sau này thay bằng API của Đức
+/* ===== DATA SẢN PHẨM NỔI BẬT ===== */
 const featuredProducts = [
   {
     id: 1,
@@ -64,26 +63,32 @@ const featuredProducts = [
 
 /* ===== DATA DỊCH VỤ ===== */
 const services = [
-  {
-    title: "Bảo Dưỡng Kính",
-    desc: "Vệ sinh và nắn chỉnh kính miễn phí trọn đời.",
-  },
-  {
-    title: "Giao Hàng Nhanh",
-    desc: "Miễn phí vận chuyển cho đơn hàng trên 1 triệu.",
-  },
-  {
-    title: "Thu Cũ Đổi Mới",
-    desc: "Trợ giá lên đời kính mới cực hấp dẫn.",
-  },
-  {
-    title: "Đo Mắt Miễn Phí",
-    desc: "Kỹ thuật viên chuyên nghiệp, máy móc hiện đại.",
-  },
+  { title: "Bảo Dưỡng Kính", desc: "Vệ sinh và nắn chỉnh kính miễn phí trọn đời." },
+  { title: "Giao Hàng Nhanh", desc: "Miễn phí vận chuyển cho đơn hàng trên 1 triệu." },
+  { title: "Thu Cũ Đổi Mới", desc: "Trợ giá lên đời kính mới cực hấp dẫn." },
+  { title: "Đo Mắt Miễn Phí", desc: "Kỹ thuật viên chuyên nghiệp, máy móc hiện đại." },
 ];
 
 function HomePage() {
   const [current, setCurrent] = useState(0);
+
+  // <--- 2. Khai báo công cụ chuyển trang
+  const navigate = useNavigate();
+
+  // Giả lập trạng thái đăng nhập (false = chưa đăng nhập)
+  const isLoggedIn = false;
+
+  // <--- 3. HÀM XỬ LÝ KHI BẤM "THÊM VÀO GIỎ"
+  const handleAddToCart = (productName) => {
+    if (isLoggedIn === false) {
+      // Logic: Nếu chưa đăng nhập -> Alert -> Chuyển sang Login
+      alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ!");
+      navigate("/login");
+    } else {
+      // Logic: Nếu đã đăng nhập -> Thêm vào giỏ
+      alert(`Đã thêm ${productName} vào giỏ hàng!`);
+    }
+  };
 
   const prevSlide = () => {
     setCurrent((prev) => (prev === 0 ? sliderData.length - 1 : prev - 1));
@@ -97,7 +102,6 @@ function HomePage() {
       <main className="w-full font-sans text-gray-800">
         {/* ===== 1. SLIDER SECTION ===== */}
         <section className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-gray-100">
-          {/* Image */}
           <div className="w-full h-full relative">
             <img
                 key={current}
@@ -105,14 +109,12 @@ function HomePage() {
                 alt={sliderData[current].title}
                 className="w-full h-full object-cover md:object-contain object-center transition-all duration-700 ease-in-out"
             />
-            {/* Overlay Gradient giúp chữ dễ đọc hơn */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent md:via-black/10" />
           </div>
 
-          {/* Content Slider */}
           <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-24 max-w-4xl text-white">
           <span className="text-amber-400 font-bold tracking-widest uppercase mb-2 text-sm md:text-base animate-fadeIn">
-            New Collection 2024
+            New Collection 2026
           </span>
             <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
               {sliderData[current].title}
@@ -126,22 +128,11 @@ function HomePage() {
             </button>
           </div>
 
-          {/* Nút điều hướng Slider */}
-          <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 text-white border border-white/30 flex items-center justify-center backdrop-blur-sm transition"
-          >
-            ❮
-          </button>
-          <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 text-white border border-white/30 flex items-center justify-center backdrop-blur-sm transition"
-          >
-            ❯
-          </button>
+          <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 text-white border border-white/30 flex items-center justify-center backdrop-blur-sm transition">❮</button>
+          <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 text-white border border-white/30 flex items-center justify-center backdrop-blur-sm transition">❯</button>
         </section>
 
-        {/* ===== 2. FEATURED PRODUCTS (SẢN PHẨM NỔI BẬT) - MỚI THÊM ===== */}
+        {/* ===== 2. FEATURED PRODUCTS (SẢN PHẨM NỔI BẬT) ===== */}
         <section className="max-w-7xl mx-auto px-6 py-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Sản Phẩm Nổi Bật</h2>
@@ -159,18 +150,19 @@ function HomePage() {
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    {/* Tag Category */}
                     <span className="absolute top-3 left-3 bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-md text-gray-800">
-                  {product.category}
-                </span>
+                      {product.category}
+                    </span>
 
-                    {/* Nút Add to Cart ẩn hiện */}
-                    <button className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-amber-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg whitespace-nowrap">
+                    {/* <--- 4. NÚT ADD TO CART: Đã gắn sự kiện onClick */}
+                    <button
+                        onClick={() => handleAddToCart(product.name)}
+                        className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-amber-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg whitespace-nowrap"
+                    >
                       Thêm vào giỏ
                     </button>
                   </div>
 
-                  {/* Thông tin sản phẩm */}
                   <div className="p-5 text-center">
                     <h3 className="text-lg font-semibold text-gray-800 mb-1 group-hover:text-amber-600 transition-colors">
                       {product.name}
@@ -194,7 +186,7 @@ function HomePage() {
             {services.map((item, index) => (
                 <div key={index} className="text-center p-6 hover:bg-white hover:shadow-lg rounded-xl transition-all duration-300">
                   <div className="w-14 h-14 mx-auto bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mb-4">
-                    ✦ {/* Có thể thay bằng icon thật sau này */}
+                    ✦
                   </div>
                   <h3 className="font-bold text-lg mb-2 text-gray-900">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
@@ -203,11 +195,9 @@ function HomePage() {
           </div>
         </section>
 
-        {/* ===== 4. CTA (CALL TO ACTION) ===== */}
+        {/* ===== 4. CTA SECTION ===== */}
         <section className="relative py-24 bg-gray-900 text-white overflow-hidden">
-          {/* Background Pattern mờ */}
           <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-
           <div className="relative max-w-4xl mx-auto text-center px-6 z-10">
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
               Tìm Chiếc Kính Hoàn Hảo Của Bạn
@@ -215,7 +205,6 @@ function HomePage() {
             <p className="text-gray-400 mb-10 text-lg max-w-2xl mx-auto">
               Hàng ngàn mẫu gọng kính và tròng kính chất lượng cao đang chờ bạn khám phá. Đặt lịch đo mắt ngay hôm nay.
             </p>
-
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <button className="px-8 py-4 bg-amber-600 text-white uppercase font-bold tracking-widest rounded-lg hover:bg-amber-500 transition shadow-lg shadow-amber-900/50">
                 Mua Ngay
