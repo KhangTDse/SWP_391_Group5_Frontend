@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 function StoreLayout() {
   return (
-    <div>
+    <div className="pt-20">
       <Header />
       <Outlet />
       <Footer />

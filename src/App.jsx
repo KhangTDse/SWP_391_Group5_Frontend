@@ -2,15 +2,14 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage"; // <--- 1. Import trang mới
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ShopPage from "./pages/ShopPage";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 import StoreLayout from "./layout/StoreLayout";
+import AdminLayout from "./layout/AdminLayout";
 function App() {
   return (
-    <div className="pt-20">
+    <div >
       <Routes>
         <Route element={<StoreLayout />}>
           <Route path="/" element={<HomePage />} />
@@ -18,8 +17,14 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/shop" element={<ShopPage />} />
-          <Route path="/dashboard" element={<AdminDashboard />} />
         </Route>
+
+        <Route element={<AdminLayout />}>
+          <Route path="/dashboard" element={<AdminDashboard />} />
+          
+        </Route>
+
+        
       </Routes>
     </div>
   );
