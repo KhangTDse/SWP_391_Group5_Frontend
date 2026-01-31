@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // <--- 1. Import cái này để chuyển trang
+import { useNavigate, Link } from "react-router-dom"; // Import Link và useNavigate
 
 /* LƯU Ý: Đảm bảo bạn vẫn giữ các hình ảnh này trong thư mục image */
 import glassesImg from "../image/img1.png";
 import glassesImg1 from "../image/images.jpg";
 import glassesImg2 from "../image/getty-images-t00PsxNOJrg-unsplash.jpg";
-import { Link } from 'react-router-dom';
 
 /* ===== DATA SLIDER (Banner chính) ===== */
 const sliderData = [
@@ -71,21 +70,20 @@ const services = [
 
 function HomePage() {
   const [current, setCurrent] = useState(0);
-
-  // <--- 2. Khai báo công cụ chuyển trang
   const navigate = useNavigate();
 
-  // Giả lập trạng thái đăng nhập (false = chưa đăng nhập)
-  const isLoggedIn = false;
+  // <--- 1. CẬP NHẬT LOGIC KIỂM TRA ĐĂNG NHẬP
+  // Lấy trạng thái từ bộ nhớ máy (nếu 'true' thì là đã đăng nhập)
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-  // <--- 3. HÀM XỬ LÝ KHI BẤM "THÊM VÀO GIỎ"
-  const handleAddToCart = (productName) => {
-    if (isLoggedIn === false) {
-      // Logic: Nếu chưa đăng nhập -> Alert -> Chuyển sang Login
+  const handleAddToCart = (e, productName) => {
+    // Ngăn không cho sự kiện click lan ra ngoài (để không bị nhảy vào trang chi tiết khi bấm nút Mua)
+    e.stopPropagation();
+
+    if (!isLoggedIn) {
       alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ!");
       navigate("/login");
     } else {
-      // Logic: Nếu đã đăng nhập -> Thêm vào giỏ
       alert(`Đã thêm ${productName} vào giỏ hàng!`);
     }
   };
@@ -143,30 +141,37 @@ function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             {featuredProducts.map((product) => (
                 <div key={product.id} className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden cursor-pointer">
-                  {/* Ảnh sản phẩm */}
-                  <div className="relative h-64 overflow-hidden bg-gray-50">
-                    <img
-                        src={product.img}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <span className="absolute top-3 left-3 bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-md text-gray-800">
-                      {product.category}
-                    </span>
 
-                    {/* <--- 4. NÚT ADD TO CART: Đã gắn sự kiện onClick */}
-                    <button
-                        onClick={() => handleAddToCart(product.name)}
-                        className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-amber-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg whitespace-nowrap"
-                    >
-                      Thêm vào giỏ
-                    </button>
-                  </div>
+                  {/* <--- 2. THÊM LINK ĐỂ CHUYỂN SANG TRANG CHI TIẾT */}
+                  {/* Bấm vào vùng ảnh sẽ chuyển trang */}
+                  <Link to={`/product/${product.id}`}>
+                    <div className="relative h-64 overflow-hidden bg-gray-50">
+                      <img
+                          src={product.img}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <span className="absolute top-3 left-3 bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-md text-gray-800">
+                        {product.category}
+                        </span>
+
+                      {/* NÚT ADD TO CART */}
+                      <button
+                          onClick={(e) => handleAddToCart(e, product.name)} // Truyền thêm 'e' để chặn sự kiện
+                          className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-amber-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg whitespace-nowrap z-10"
+                      >
+                        Thêm vào giỏ
+                      </button>
+                    </div>
+                  </Link>
 
                   <div className="p-5 text-center">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1 group-hover:text-amber-600 transition-colors">
-                      {product.name}
-                    </h3>
+                    {/* Bấm vào tên sản phẩm cũng chuyển trang */}
+                    <Link to={`/product/${product.id}`}>
+                      <h3 className="text-lg font-semibold text-gray-800 mb-1 group-hover:text-amber-600 transition-colors">
+                        {product.name}
+                      </h3>
+                    </Link>
                     <p className="text-amber-600 font-bold text-lg">{product.price}</p>
                   </div>
                 </div>

@@ -3,7 +3,8 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage'; // <--- 1. Import trang mới
 import Header from './components/Header';
-
+import ProductDetailPage from './pages/ProductDetailPage';
+import ShopPage from './pages/ShopPage';
 function App() {
     return (
         <div className="pt-20">
@@ -12,7 +13,9 @@ function App() {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} /> {/* <--- 2. Thêm đường dẫn này */}
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/product/:id" element={<ProductDetailPage />} />
+                <Route path="/shop" element={<ShopPage />} />
             </Routes>
         </div>
     );
