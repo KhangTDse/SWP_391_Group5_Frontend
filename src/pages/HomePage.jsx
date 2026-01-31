@@ -1,46 +1,84 @@
 import { useState } from "react";
+
+/* LƯU Ý: Đảm bảo bạn vẫn giữ các hình ảnh này trong thư mục image
+   như cũ nhé. Nếu tên file khác thì sửa lại dòng import này.
+*/
 import glassesImg from "../image/img1.png";
-import glassesImg1 from "../image/images.jpg";
+import glassesImg1 from "../image/images.jpg"; // Hình này nếu không dùng thì có thể xóa
 import glassesImg2 from "../image/getty-images-t00PsxNOJrg-unsplash.jpg";
 
-/* ===== DATA (đổi text thoải mái sau này) ===== */
+/* ===== DATA SLIDER (Banner chính) ===== */
 const sliderData = [
   {
     id: 1,
     title: "Modern Eyewear Collection",
-    desc: "Minimal design crafted for everyday comfort",
+    desc: "Thiết kế tối giản, tinh tế cho sự thoải mái hàng ngày.",
     image: glassesImg2,
   },
   {
     id: 2,
     title: "Premium Optical Experience",
-    desc: "Designed for clarity, durability, and style",
+    desc: "Trải nghiệm hình ảnh rõ nét với tròng kính công nghệ cao.",
     image: glassesImg,
   },
   {
     id: 3,
     title: "Seasonal Limited Selection",
-    desc: "Exclusive designs available for a short time",
+    desc: "Bộ sưu tập giới hạn dành riêng cho mùa hè này.",
     image: glassesImg2,
   },
 ];
 
+/* ===== DATA SẢN PHẨM NỔI BẬT (MỚI THÊM) ===== */
+// Tạm thời dùng link ảnh online cho đẹp, sau này thay bằng API của Đức
+const featuredProducts = [
+  {
+    id: 1,
+    name: "Classic Round Ray-Ban",
+    price: "2.500.000đ",
+    category: "Unisex",
+    img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 2,
+    name: "Matte Black Wayfarer",
+    price: "3.200.000đ",
+    category: "Men",
+    img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 3,
+    name: "Titanium Gold Frame",
+    price: "4.500.000đ",
+    category: "Women",
+    img: "https://images.unsplash.com/photo-1591076482161-42ce6da69f67?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 4,
+    name: "Blue Light Filter Lens",
+    price: "1.800.000đ",
+    category: "Office",
+    img: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+];
+
+/* ===== DATA DỊCH VỤ ===== */
 const services = [
   {
-    title: "Eyewear Care Service",
-    desc: "Professional maintenance available nationwide",
+    title: "Bảo Dưỡng Kính",
+    desc: "Vệ sinh và nắn chỉnh kính miễn phí trọn đời.",
   },
   {
-    title: "Fast Nationwide Delivery",
-    desc: "Quick and reliable shipping across the country",
+    title: "Giao Hàng Nhanh",
+    desc: "Miễn phí vận chuyển cho đơn hàng trên 1 triệu.",
   },
   {
-    title: "Upgrade & Trade Program",
-    desc: "Support for upgrading your eyewear collection",
+    title: "Thu Cũ Đổi Mới",
+    desc: "Trợ giá lên đời kính mới cực hấp dẫn.",
   },
   {
-    title: "Vision Support",
-    desc: "Expert assistance at all brand locations",
+    title: "Đo Mắt Miễn Phí",
+    desc: "Kỹ thuật viên chuyên nghiệp, máy móc hiện đại.",
   },
 ];
 
@@ -56,106 +94,139 @@ function HomePage() {
   };
 
   return (
-    <main className="w-full">
-      {/* ===== SLIDER ===== */}
-      {/* ===== SLIDER ===== */}
-      <section className="relative w-full h-[460px] overflow-hidden bg-white">
-        {/* Image */}
-        <img
-          key={current}
-          src={sliderData[current].image}
-          alt={sliderData[current].title}
-          className="w-full h-full object-contain bg-white transition-all duration-700 ease-in-out"
-        />
-
-        {/* Overlay nhẹ để chữ rõ */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-transparent" />
-
-        {/* Content */}
-        <div
-          key={`content-${current}`}
-          className="absolute inset-0 flex flex-col justify-center
-               px-16 md:px-24
-               max-w-3xl
-               text-white animate-fadeUp pointer-events-none"
-        >
-          <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-            {sliderData[current].title}
-          </h2>
-
-          <p className="text-sm md:text-base opacity-90">
-            {sliderData[current].desc}
-          </p>
-        </div>
-
-        {/* LEFT BUTTON */}
-        <button
-          onClick={prevSlide}
-          aria-label="Previous slide"
-          className="absolute left-6 top-1/2 -translate-y-1/2
-               w-14 h-14 rounded-full
-               bg-white/90 backdrop-blur-md
-               border border-gray-200
-               flex items-center justify-center
-               text-2xl font-medium
-               shadow-lg
-               hover:scale-110 hover:bg-white
-               transition z-20"
-        >
-          ‹
-        </button>
-
-        {/* RIGHT BUTTON */}
-        <button
-          onClick={nextSlide}
-          aria-label="Next slide"
-          className="absolute right-6 top-1/2 -translate-y-1/2
-               w-14 h-14 rounded-full
-               bg-white/90 backdrop-blur-md
-               border border-gray-200
-               flex items-center justify-center
-               text-2xl font-medium
-               shadow-lg
-               hover:scale-110 hover:bg-white
-               transition z-20"
-        >
-          ›
-        </button>
-      </section>
-
-      {/* ===== SERVICES ===== */}
-      <section className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-4 gap-10">
-        {services.map((item, index) => (
-          <div key={index}>
-            <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-            <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+      <main className="w-full font-sans text-gray-800">
+        {/* ===== 1. SLIDER SECTION ===== */}
+        <section className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-gray-100">
+          {/* Image */}
+          <div className="w-full h-full relative">
+            <img
+                key={current}
+                src={sliderData[current].image}
+                alt={sliderData[current].title}
+                className="w-full h-full object-cover md:object-contain object-center transition-all duration-700 ease-in-out"
+            />
+            {/* Overlay Gradient giúp chữ dễ đọc hơn */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent md:via-black/10" />
           </div>
-        ))}
-      </section>
 
-      {/* ===== CTA ===== */}
-      <section className="bg-gray-100 py-20">
-        <div className="max-w-4xl mx-auto text-center px-6">
-          <h2 className="text-3xl font-bold mb-6">
-            Explore Our Eyewear System
-          </h2>
+          {/* Content Slider */}
+          <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-24 max-w-4xl text-white">
+          <span className="text-amber-400 font-bold tracking-widest uppercase mb-2 text-sm md:text-base animate-fadeIn">
+            New Collection 2024
+          </span>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
+              {sliderData[current].title}
+            </h2>
+            <p className="text-lg md:text-xl opacity-90 mb-8 max-w-lg drop-shadow-md">
+              {sliderData[current].desc}
+            </p>
 
-          <p className="text-gray-600 mb-10">
-            Discover premium eyewear collections or find a store near you.
-          </p>
-
-          <div className="flex flex-col md:flex-row justify-center gap-6">
-            <button className="px-8 py-3 bg-black text-white uppercase tracking-widest text-sm hover:opacity-80 transition">
-              Buy Now
-            </button>
-
-            <button className="px-8 py-3 border border-black text-black uppercase tracking-widest text-sm hover:bg-black hover:text-white transition">
-              Find Nearest Store
+            <button className="w-fit px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-full shadow-lg hover:shadow-amber-500/50 transition-all transform hover:-translate-y-1">
+              Khám Phá Ngay
             </button>
           </div>
-        </div>
-      </section>
-    </main>
+
+          {/* Nút điều hướng Slider */}
+          <button
+              onClick={prevSlide}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 text-white border border-white/30 flex items-center justify-center backdrop-blur-sm transition"
+          >
+            ❮
+          </button>
+          <button
+              onClick={nextSlide}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 hover:bg-white/40 text-white border border-white/30 flex items-center justify-center backdrop-blur-sm transition"
+          >
+            ❯
+          </button>
+        </section>
+
+        {/* ===== 2. FEATURED PRODUCTS (SẢN PHẨM NỔI BẬT) - MỚI THÊM ===== */}
+        <section className="max-w-7xl mx-auto px-6 py-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Sản Phẩm Nổi Bật</h2>
+            <div className="w-20 h-1 bg-amber-500 mx-auto rounded-full"></div>
+            <p className="text-gray-500 mt-4">Những mẫu kính được yêu thích nhất tháng này</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {featuredProducts.map((product) => (
+                <div key={product.id} className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden cursor-pointer">
+                  {/* Ảnh sản phẩm */}
+                  <div className="relative h-64 overflow-hidden bg-gray-50">
+                    <img
+                        src={product.img}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    {/* Tag Category */}
+                    <span className="absolute top-3 left-3 bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-md text-gray-800">
+                  {product.category}
+                </span>
+
+                    {/* Nút Add to Cart ẩn hiện */}
+                    <button className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-amber-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg whitespace-nowrap">
+                      Thêm vào giỏ
+                    </button>
+                  </div>
+
+                  {/* Thông tin sản phẩm */}
+                  <div className="p-5 text-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1 group-hover:text-amber-600 transition-colors">
+                      {product.name}
+                    </h3>
+                    <p className="text-amber-600 font-bold text-lg">{product.price}</p>
+                  </div>
+                </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <button className="px-8 py-3 border-2 border-gray-800 text-gray-800 font-bold uppercase tracking-widest hover:bg-gray-800 hover:text-white transition rounded-md">
+              Xem Tất Cả Sản Phẩm
+            </button>
+          </div>
+        </section>
+
+        {/* ===== 3. SERVICES SECTION ===== */}
+        <section className="bg-gray-50 py-20">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+            {services.map((item, index) => (
+                <div key={index} className="text-center p-6 hover:bg-white hover:shadow-lg rounded-xl transition-all duration-300">
+                  <div className="w-14 h-14 mx-auto bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mb-4">
+                    ✦ {/* Có thể thay bằng icon thật sau này */}
+                  </div>
+                  <h3 className="font-bold text-lg mb-2 text-gray-900">{item.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===== 4. CTA (CALL TO ACTION) ===== */}
+        <section className="relative py-24 bg-gray-900 text-white overflow-hidden">
+          {/* Background Pattern mờ */}
+          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+
+          <div className="relative max-w-4xl mx-auto text-center px-6 z-10">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+              Tìm Chiếc Kính Hoàn Hảo Của Bạn
+            </h2>
+            <p className="text-gray-400 mb-10 text-lg max-w-2xl mx-auto">
+              Hàng ngàn mẫu gọng kính và tròng kính chất lượng cao đang chờ bạn khám phá. Đặt lịch đo mắt ngay hôm nay.
+            </p>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <button className="px-8 py-4 bg-amber-600 text-white uppercase font-bold tracking-widest rounded-lg hover:bg-amber-500 transition shadow-lg shadow-amber-900/50">
+                Mua Ngay
+              </button>
+              <button className="px-8 py-4 border border-gray-600 text-white uppercase font-bold tracking-widest rounded-lg hover:bg-white hover:text-black transition">
+                Tìm Cửa Hàng Gần Nhất
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
   );
 }
 
