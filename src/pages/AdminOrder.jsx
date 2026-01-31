@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AdminTopHeader from "../components/AdminTopHeader";
 
 const ordersMock = [
   { id: 1, customer: "Nguyen Van A", status: "Completed", total: 120 },
@@ -16,7 +17,7 @@ function AdminOrders() {
 
   return (
     <div className="ml-64 p-8">
-      <h1 className="text-3xl font-semibold mb-6">Orders</h1>
+      <AdminTopHeader/>
 
       {/* Filter */}
       <div className="flex gap-3 mb-4">

@@ -6,6 +6,15 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    // MOCK TÀI KHOẢNG ADMIN 
+    const adminAccount = {
+            email: "admin@gmail.com",
+            password: "123456",
+            role: "admin",
+    };
+
+    
+
     // 🔒 Khóa scroll khi vào trang login
     useEffect(() => {
         document.body.style.overflow = "hidden";
@@ -19,6 +28,11 @@ function LoginPage() {
         console.log("Login info:", email, password);
 
         alert("Đăng nhập thành công (demo)");
+        // CHECK ADMIN
+        if (email == adminAccount.email && password == adminAccount.password){
+            navigate("/dashboard");
+            return;
+        }
         navigate("/");
     };
 
