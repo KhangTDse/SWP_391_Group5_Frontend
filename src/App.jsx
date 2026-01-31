@@ -1,15 +1,21 @@
-import Header from "./components/Header"
-import HomePage from "./pages/HomePage"
-import Footer from "./components/Footer"
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage'; // <--- 1. Import trang mới
+import Header from './components/Header';
 
 function App() {
-  return (
-    <div>
-      <Header />
-      <HomePage />
-      <Footer />
-    </div>
-  )
+    return (
+        <div className="pt-20">
+            <Header />
+
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} /> {/* <--- 2. Thêm đường dẫn này */}
+            </Routes>
+        </div>
+    );
 }
 
-export default App
+export default App;
