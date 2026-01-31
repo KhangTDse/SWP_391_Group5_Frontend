@@ -19,6 +19,13 @@ Repo này dùng cho **Frontend team**. Branch `main` chỉ chứa **template + c
   * Merge vào `main` bằng **Pull Request (PR)**
 
 ---
+Lần đầu clone về mọi người nhớ
+```bash
+cd [thư mục chứa code] hoặc cd tab
+npm install
+npm run dev
+```
+---
 
 ## 🧩 BƯỚC 1: Clone repo (LÀM 1 LẦN DUY NHẤT)
 
