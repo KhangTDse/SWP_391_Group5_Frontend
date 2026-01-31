@@ -1,134 +1,114 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function RegisterPage() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    // State để lưu thông tin nhập vào
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
-
-    // Hàm xử lý khi gõ phím
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+  // 🔒 Khóa scroll khi ở trang register
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
     };
+  }, []);
 
-    // Hàm xử lý khi bấm nút Đăng Ký
-    const handleRegister = (e) => {
-        e.preventDefault(); // Chặn reset trang
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-        // 1. Kiểm tra mật khẩu nhập lại có khớp không
-        if (formData.password !== formData.confirmPassword) {
-            alert("Mật khẩu nhập lại không khớp!");
-            return;
-        }
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-        // 2. Giả lập đăng ký thành công
-        console.log("Thông tin đăng ký:", formData);
-        alert("Đăng ký thành công! Vui lòng đăng nhập.");
+  const handleRegister = (e) => {
+    e.preventDefault();
 
-        // 3. Chuyển hướng về trang Login
-        navigate('/login');
-    };
+    if (formData.password !== formData.confirmPassword) {
+      alert("Mật khẩu nhập lại không khớp!");
+      return;
+    }
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 font-sans">
-            <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
+    console.log("Thông tin đăng ký:", formData);
+    alert("Đăng ký thành công! Vui lòng đăng nhập.");
 
-                {/* Tiêu đề */}
-                <div className="text-center">
-                    <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-                        Tạo tài khoản mới
-                    </h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        Trở thành thành viên của Eyewear ngay hôm nay
-                    </p>
-                </div>
+    navigate("/login");
+  };
 
-                {/* Form */}
-                <form className="mt-8 space-y-6" onSubmit={handleRegister}>
-                    <div className="rounded-md shadow-sm space-y-4">
-
-                        {/* Tên hiển thị */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700">Họ và Tên</label>
-                            <input
-                                name="name"
-                                type="text"
-                                required
-                                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm mt-1"
-                                placeholder="Nguyễn Văn A"
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        {/* Email */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700">Email</label>
-                            <input
-                                name="email"
-                                type="email"
-                                required
-                                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm mt-1"
-                                placeholder="name@example.com"
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        {/* Mật khẩu */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700">Mật khẩu</label>
-                            <input
-                                name="password"
-                                type="password"
-                                required
-                                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm mt-1"
-                                placeholder="••••••••"
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        {/* Nhập lại Mật khẩu */}
-                        <div>
-                            <label className="text-sm font-medium text-gray-700">Nhập lại mật khẩu</label>
-                            <input
-                                name="confirmPassword"
-                                type="password"
-                                required
-                                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm mt-1"
-                                placeholder="••••••••"
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Nút Đăng ký */}
-                    <div>
-                        <button
-                            type="submit"
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors"
-                        >
-                            ĐĂNG KÝ
-                        </button>
-                    </div>
-
-                    {/* Link quay lại đăng nhập */}
-                    <div className="text-center mt-4">
-                        <p className="text-sm text-gray-600">
-                            Đã có tài khoản?{' '}
-                            <Link to="/login" className="font-medium text-amber-600 hover:text-amber-500">
-                                Đăng nhập ngay
-                            </Link>
-                        </p>
-                    </div>
-                </form>
-            </div>
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Tạo tài khoản mới
+          </h2>
+          <p className="text-sm text-gray-600 mt-2">
+            Trở thành thành viên của Eyewear ngay hôm nay
+          </p>
         </div>
-    );
+
+        {/* Form */}
+        <form className="space-y-5" onSubmit={handleRegister}>
+          <input
+            name="name"
+            type="text"
+            required
+            placeholder="Họ và tên"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+            onChange={handleChange}
+          />
+
+          <input
+            name="email"
+            type="email"
+            required
+            placeholder="Email"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+            onChange={handleChange}
+          />
+
+          <input
+            name="password"
+            type="password"
+            required
+            placeholder="Mật khẩu"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+            onChange={handleChange}
+          />
+
+          <input
+            name="confirmPassword"
+            type="password"
+            required
+            placeholder="Nhập lại mật khẩu"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+            onChange={handleChange}
+          />
+
+          <button
+            type="submit"
+            className="w-full py-3 rounded-lg bg-gray-900 text-white font-medium hover:bg-amber-600 transition"
+          >
+            Đăng ký
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Đã có tài khoản?{" "}
+          <Link
+            to="/login"
+            className="text-amber-600 font-medium hover:underline"
+          >
+            Đăng nhập ngay
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default RegisterPage;

@@ -1,110 +1,106 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // <--- 1. Thêm useNavigate
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    // <--- 2. Khai báo hook chuyển trang
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const navigate = useNavigate();
+
+    // 🔒 Khóa scroll khi vào trang login
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
 
     const handleLogin = (e) => {
         e.preventDefault();
         console.log("Login info:", email, password);
 
-        // <--- 3. Giả lập đăng nhập thành công
-        // Sau này có API thì thay thế đoạn này sau
-        alert("Đăng nhập thành công! Chào mừng bạn quay lại.");
+        alert("Đăng nhập thành công (demo)");
+        navigate("/");
+    };
 
-        // Chuyển hướng về trang chủ để mua hàng
-        navigate('/');
+    const handleGoogleLogin = () => {
+        alert("Đăng nhập Google (demo)");
+        navigate("/");
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
-            <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl border border-gray-100">
+        <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
 
                 {/* Header */}
-                <div className="text-center">
-                    <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+                <div className="text-center mb-6">
+                    <h2 className="text-3xl font-bold text-gray-900">
                         Chào mừng trở lại
                     </h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        Đăng nhập để trải nghiệm mua sắm tốt nhất
+                    <p className="text-sm text-gray-600 mt-2">
+                        Đăng nhập để tiếp tục mua sắm
                     </p>
                 </div>
 
                 {/* Form */}
-                <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div className="mb-4">
-                            <label htmlFor="email-address" className="sr-only">Email</label>
-                            <input
-                                id="email-address"
-                                name="email"
-                                type="email"
-                                required
-                                className="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm"
-                                placeholder="Địa chỉ Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="sr-only">Mật khẩu</label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                className="appearance-none rounded-lg relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-amber-500 focus:border-amber-500 focus:z-10 sm:text-sm"
-                                placeholder="Mật khẩu"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                    </div>
+                <form className="space-y-5" onSubmit={handleLogin}>
+                    <input
+                        type="email"
+                        required
+                        placeholder="Email"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <input
-                                id="remember-me"
-                                name="remember-me"
-                                type="checkbox"
-                                className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
-                            />
-                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                Ghi nhớ đăng nhập
-                            </label>
-                        </div>
+                    <input
+                        type="password"
+                        required
+                        placeholder="Mật khẩu"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
 
-                        <div className="text-sm">
-                            <a href="#" className="font-medium text-amber-600 hover:text-amber-500">
-                                Quên mật khẩu?
-                            </a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <button
-                            type="submit"
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors duration-300"
-                        >
-                            Đăng Nhập
-                        </button>
-                    </div>
+                    <button
+                        type="submit"
+                        className="w-full py-3 rounded-lg bg-gray-900 text-white font-medium hover:bg-amber-600 transition"
+                    >
+                        Đăng nhập
+                    </button>
                 </form>
 
-                {/* Footer - ĐÃ SỬA CHỖ NÀY */}
-                <div className="text-center mt-4">
-                    <p className="text-sm text-gray-600">
-                        Chưa có tài khoản?{' '}
-                        {/* Thay thẻ span bằng Link để bấm vào chuyển trang */}
-                        <Link to="/register" className="font-medium text-amber-600 hover:text-amber-500 cursor-pointer">
-                            Đăng ký ngay
-                        </Link>
-                    </p>
+                {/* Divider */}
+                <div className="flex items-center my-6">
+                    <div className="flex-1 h-px bg-gray-300"></div>
+                    <span className="px-4 text-sm text-gray-500">hoặc</span>
+                    <div className="flex-1 h-px bg-gray-300"></div>
                 </div>
+
+                {/* Google Login */}
+                <button
+                    onClick={handleGoogleLogin}
+                    className="w-full flex items-center justify-center gap-3 py-3 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+                >
+                    <img
+                        src="https://www.svgrepo.com/show/475656/google-color.svg"
+                        alt="Google"
+                        className="w-5 h-5"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                        Đăng nhập với Google
+                    </span>
+                </button>
+
+                {/* Footer */}
+                <p className="text-center text-sm text-gray-600 mt-6">
+                    Chưa có tài khoản?{" "}
+                    <Link
+                        to="/register"
+                        className="text-amber-600 font-medium hover:underline"
+                    >
+                        Đăng ký ngay
+                    </Link>
+                </p>
             </div>
         </div>
     );
