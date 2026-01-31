@@ -2,7 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage'; // <--- 1. Import trang mới
+import FrameSelectionPage from './pages/FrameSelectionPage';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
     return (
@@ -13,7 +15,9 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} /> {/* <--- 2. Thêm đường dẫn này */}
+                <Route path="/frames" element={<FrameSelectionPage />} />
             </Routes>
+            <Footer />
         </div>
     );
 }
