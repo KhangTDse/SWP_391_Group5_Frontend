@@ -7,9 +7,11 @@ import ShopPage from "./pages/ShopPage";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import StoreLayout from "./layout/StoreLayout";
 import AdminLayout from "./layout/AdminLayout";
+import AdminProducts from "./pages/AdminProducts.jsx";
+import AdminOrders from "./pages/AdminOrder.jsx";
 function App() {
   return (
-    <div >
+    <div>
       <Routes>
         <Route element={<StoreLayout />}>
           <Route path="/" element={<HomePage />} />
@@ -21,10 +23,9 @@ function App() {
 
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<AdminDashboard />} />
-          
+          <Route path="/dashboard/products" element={<AdminProducts />} />
+          <Route path="/dashboard/orders" element={<AdminOrders />} />
         </Route>
-
-        
       </Routes>
     </div>
   );
