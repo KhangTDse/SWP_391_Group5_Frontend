@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage"; // <--- 1. Import trang mới
-import ProductDetailPage from "./pages/ProductDetailPage";
-import ShopPage from "./pages/ShopPage";
+import ScrollToTop from "./components/common/ScrollToTop";
+import HomePage from "./pages/HomePage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx"; // <--- 1. Import trang mới
+import ProductDetailPage from "./pages/ProductDetailPage.jsx";
+import ShopPage from "./pages/ShopPage.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import StoreLayout from "./layout/StoreLayout";
 import AdminLayout from "./layout/AdminLayout";
@@ -12,6 +13,8 @@ import AdminOrders from "./pages/AdminOrder.jsx";
 function App() {
   return (
     <div>
+      <ScrollToTop />
+
       <Routes>
         <Route element={<StoreLayout />}>
           <Route path="/" element={<HomePage />} />
@@ -22,7 +25,7 @@ function App() {
         </Route>
 
         <Route element={<AdminLayout />}>
-          <Route path="/dashboard" element={<AdminDashboard />} />
+          <Route path="/dashboard/" element={<AdminDashboard />} />
           <Route path="/dashboard/products" element={<AdminProducts />} />
           <Route path="/dashboard/orders" element={<AdminOrders />} />
         </Route>
