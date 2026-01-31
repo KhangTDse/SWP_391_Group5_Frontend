@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const frames = [
   {
     id: "f1",
@@ -19,6 +19,7 @@ const frames = [
 
 export default function FrameSelectionPage() {
   const [selectedFrame, setSelectedFrame] = useState(null);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen px-8 py-10">
@@ -54,6 +55,7 @@ export default function FrameSelectionPage() {
       <div className="flex justify-end mt-8">
         <button
           disabled={!selectedFrame}
+          onClick={() => navigate("/prescription")}
           className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
         >
           Next

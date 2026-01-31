@@ -16,8 +16,11 @@ function Header() {
           {/* Menu desktop */}
           <nav className="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest">
             {/* Đổi thẻ a thành Link để chuyển trang mượt mà */}
-            <Link to="/frames" className="hover:text-amber-600 transition-colors cursor-pointer font-medium">
+            <Link to="/" className="hover:text-amber-600 transition-colors cursor-pointer font-medium">
               Shop
+            </Link>
+            <Link to="/frames" className="hover:text-amber-600 transition-colors cursor-pointer font-medium">
+              Order
             </Link>
             <Link to="#" className="hover:text-amber-600 transition-colors cursor-pointer font-medium">
               About
