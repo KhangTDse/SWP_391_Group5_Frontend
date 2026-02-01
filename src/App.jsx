@@ -27,6 +27,8 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/frames" element={<FrameSelectionPage />} />
+          <Route path="/prescription" element={<PrescriptionPage />} />
         </Route>
 
         <Route element={<AdminLayout />}>
@@ -34,10 +36,9 @@ function App() {
           <Route path="/dashboard/products" element={<AdminProducts />} />
           <Route path="/dashboard/orders" element={<AdminOrders />} />
         </Route>
-                <Route path="/frames" element={<FrameSelectionPage />} />
-                <Route path="/prescription" element={<PrescriptionPage />} />
+
       </Routes>
-            <Footer />
+   
     </div>
   );
 }
