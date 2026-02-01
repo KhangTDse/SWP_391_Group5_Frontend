@@ -20,7 +20,9 @@ function Header() {
             <Link to="/shop" className="hover:text-amber-600 transition-colors cursor-pointer font-medium">
               Shop
             </Link>
-
+            <Link to="/frames" className="hover:text-amber-600 transition-colors cursor-pointer font-medium">
+              Order
+            </Link>
             <Link to="#" className="hover:text-amber-600 transition-colors cursor-pointer font-medium">
               About
             </Link>
