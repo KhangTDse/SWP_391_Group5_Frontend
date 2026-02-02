@@ -2,11 +2,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function ProductDetailPage() {
-    const { id } = useParams(); // Lấy ID sản phẩm từ URL (để sau này gọi API)
+    const { id } = useParams(); // Lấy ID sản phẩm từ URL
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
 
-    // Dữ liệu giả lập (Mock data) cho đẹp
+    // Dữ liệu giả lập (Mock data)
     const product = {
         id: id,
         name: "Kính Râm Ray-Ban Classic Aviator",
@@ -19,14 +19,24 @@ function ProductDetailPage() {
     };
 
     const handleAddToCart = () => {
-        // Kiểm tra đăng nhập (Logic cũ của bạn)
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        if (!isLoggedIn) {
+        // --- SỬA LOGIC Ở ĐÂY ĐỂ KHỚP VỚI TRANG LOGIN ---
+
+        // 1. Lấy dữ liệu từ localStorage ra (dạng chuỗi JSON)
+        const storedUser = localStorage.getItem("currentUser");
+
+        // 2. Kiểm tra: Nếu không có dữ liệu -> Chưa đăng nhập
+        if (!storedUser) {
             alert("Vui lòng đăng nhập để mua hàng!");
             navigate('/login');
             return;
         }
-        alert(`Đã thêm ${quantity} sản phẩm vào giỏ!`);
+
+        // 3. Nếu đã có dữ liệu (đã đăng nhập)
+        // Parse ra object để dùng nếu cần (ví dụ lấy tên user)
+        const user = JSON.parse(storedUser);
+
+        console.log("Người mua:", user.email); // Kiểm tra log chơi
+        alert(`✅ Đã thêm ${quantity} sản phẩm vào giỏ hàng!\n(Xin chào ${user.role === 'admin' ? 'Sếp' : 'Khách hàng'}: ${user.email})`);
     };
 
     return (
