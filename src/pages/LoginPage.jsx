@@ -6,14 +6,12 @@ function LoginPage() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    // MOCK TÀI KHOẢNG ADMIN 
+    // MOCK TÀI KHOẢN ADMIN
     const adminAccount = {
-            email: "admin@gmail.com",
-            password: "123456",
-            role: "admin",
+        email: "admin@gmail.com",
+        password: "123456",
+        role: "admin",
     };
-
-    
 
     // 🔒 Khóa scroll khi vào trang login
     useEffect(() => {
@@ -27,22 +25,39 @@ function LoginPage() {
         e.preventDefault();
         console.log("Login info:", email, password);
 
-        alert("Đăng nhập thành công (demo)");
         // CHECK ADMIN
-        if (email == adminAccount.email && password == adminAccount.password){
+        if (email === adminAccount.email && password === adminAccount.password){
+            alert("Xin chào Admin!");
+            // 🔥 QUAN TRỌNG: Lưu thông tin Admin vào localStorage
+            localStorage.setItem("currentUser", JSON.stringify(adminAccount));
             navigate("/dashboard");
             return;
         }
+
+        // GIẢ LẬP ĐĂNG NHẬP KHÁCH HÀNG THÀNH CÔNG
+        // 🔥 QUAN TRỌNG: Lưu thông tin User vào localStorage
+        const userLink = { email: email, role: "customer", name: "Khách hàng" };
+        localStorage.setItem("currentUser", JSON.stringify(userLink));
+
+        // Phát sự kiện để Header cập nhật ngay lập tức (nếu Header có nghe event này)
+        window.dispatchEvent(new Event("storage"));
+
+        alert("Đăng nhập thành công!");
         navigate("/");
     };
 
     const handleGoogleLogin = () => {
-        alert("Đăng nhập Google (demo)");
+        // 🔥 QUAN TRỌNG: Cũng phải lưu khi login Google
+        const googleUser = { email: "google@gmail.com", role: "customer", name: "Google User" };
+        localStorage.setItem("currentUser", JSON.stringify(googleUser));
+        window.dispatchEvent(new Event("storage"));
+
+        alert("Đăng nhập Google thành công!");
         navigate("/");
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+        <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 z-50">
             <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
 
                 {/* Header */}
