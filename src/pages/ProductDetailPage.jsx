@@ -12,6 +12,7 @@ function ProductDetailPage() {
         name: "Kính Râm Ray-Ban Classic Aviator",
         price: "3.500.000₫",
         description: "Mẫu kính phi công huyền thoại, gọng kim loại vàng sang trọng, tròng kính xanh rêu chống tia UV tuyệt đối. Phù hợp cho cả nam và nữ.",
+        // Lưu ý: Trang chi tiết dùng mảng images, nhưng Giỏ hàng thường cần 1 ảnh đại diện (image)
         images: [
             "https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
         ],
@@ -19,23 +20,47 @@ function ProductDetailPage() {
     };
 
     const handleAddToCart = () => {
-        // --- SỬA LOGIC Ở ĐÂY ĐỂ KHỚP VỚI TRANG LOGIN ---
-
-        // 1. Lấy dữ liệu từ localStorage ra (dạng chuỗi JSON)
+        // --- BƯỚC 1: KIỂM TRA ĐĂNG NHẬP (GIỮ NGUYÊN CỦA BẠN) ---
         const storedUser = localStorage.getItem("currentUser");
-
-        // 2. Kiểm tra: Nếu không có dữ liệu -> Chưa đăng nhập
         if (!storedUser) {
             alert("Vui lòng đăng nhập để mua hàng!");
             navigate('/login');
             return;
         }
 
-        // 3. Nếu đã có dữ liệu (đã đăng nhập)
-        // Parse ra object để dùng nếu cần (ví dụ lấy tên user)
-        const user = JSON.parse(storedUser);
+        const user = JSON.parse(storedUser); // Lấy info user để hiện thông báo cho vui
 
-        console.log("Người mua:", user.email); // Kiểm tra log chơi
+        // --- BƯỚC 2: LOGIC LƯU VÀO GIỎ HÀNG (MỚI THÊM) ---
+
+        // 2.1. Lấy giỏ hàng cũ từ localStorage (nếu chưa có thì tạo mảng rỗng)
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // 2.2. Kiểm tra xem sản phẩm này (ID này) đã có trong giỏ chưa
+        const existingItemIndex = cart.findIndex(item => item.id === product.id);
+
+        if (existingItemIndex !== -1) {
+            // TRƯỜNG HỢP 1: Đã có -> Cộng dồn số lượng
+            cart[existingItemIndex].quantity += quantity;
+        } else {
+            // TRƯỜNG HỢP 2: Chưa có -> Thêm mới vào mảng
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                // Quan trọng: Lấy ảnh đầu tiên làm ảnh đại diện trong giỏ
+                image: product.images[0],
+                quantity: quantity
+            });
+        }
+
+        // 2.3. Lưu ngược lại vào localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // 2.4. Bắn sự kiện để Header cập nhật số lượng (nếu có)
+        window.dispatchEvent(new Event("storage"));
+
+        // --- BƯỚC 3: THÔNG BÁO THÀNH CÔNG ---
+        console.log("Người mua:", user.email);
         alert(`✅ Đã thêm ${quantity} sản phẩm vào giỏ hàng!\n(Xin chào ${user.role === 'admin' ? 'Sếp' : 'Khách hàng'}: ${user.email})`);
     };
 
