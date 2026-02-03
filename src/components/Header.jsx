@@ -13,6 +13,7 @@ function Header() {
             🦅 FALCON EYEWEAR
           </Link>
 
+
           {/* Menu desktop */}
           <nav className="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest">
 
@@ -30,6 +31,10 @@ function Header() {
               Contact
             </Link>
 
+            <Link to="/cart" className="relative group p-2 hover:bg-gray-100 rounded-full transition">
+              {/* Icon Cart đơn giản */}
+              <span className="text-2xl">🛒</span>
+            </Link>
             {/* NÚT LOGIN */}
             <button
                 onClick={() => navigate('/login')} // Bấm vào là nhảy sang trang Login
