@@ -12,42 +12,37 @@ import {
   Bar,
 } from "recharts";
 
-/* ===== MOCK DATA (sau này thay API) ===== */
-const revenueData = [
-  { day: "Mon", revenue: 1200 },
-  { day: "Tue", revenue: 2100 },
-  { day: "Wed", revenue: 1800 },
-  { day: "Thu", revenue: 2600 },
-  { day: "Fri", revenue: 3200 },
-  { day: "Sat", revenue: 2800 },
-  { day: "Sun", revenue: 3500 },
-];
+import {
+  revenueData,
+  orderStatusData,
+  overviewStats,
+  recentOrders,
+} from "../data/adminMock";
 
-const orderStatusData = [
-  { name: "Completed", value: 68 },
-  { name: "Pending", value: 32 },
-  { name: "Shipping", value: 20 },
-];
-
-function AdminDashboard() {
+function AdminOverview() {
   return (
     <div className="ml-64 p-8 bg-gray-50 min-h-screen">
       {/* ===== HEADER ===== */}
-      <AdminTopHeader />
+      <AdminTopHeader title="Tổng quan" />
 
       {/* ===== STAT CARDS ===== */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-        <StatCard title="Total Products" value="128" />
-        <StatCard title="Orders Today" value="32" />
-        <StatCard title="Customers" value="540" />
-        <StatCard title="Revenue" value="$12,400" />
+        {overviewStats.map((item, index) => (
+          <StatCard
+            key={index}
+            title={item.title}
+            value={item.value}
+          />
+        ))}
       </div>
 
       {/* ===== CHARTS ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
-        {/* Revenue Chart */}
+        {/* Doanh thu theo tuần */}
         <div className="bg-white rounded-xl shadow p-6 lg:col-span-2">
-          <h2 className="text-lg font-semibold mb-4">Weekly Revenue</h2>
+          <h2 className="text-lg font-semibold mb-4">
+            Doanh thu theo tuần
+          </h2>
 
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={revenueData}>
@@ -65,9 +60,11 @@ function AdminDashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* Orders Status Chart */}
+        {/* Trạng thái đơn hàng */}
         <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">Order Status</h2>
+          <h2 className="text-lg font-semibold mb-4">
+            Trạng thái đơn hàng
+          </h2>
 
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={orderStatusData}>
@@ -80,32 +77,33 @@ function AdminDashboard() {
         </div>
       </div>
 
-      {/* ===== RECENT ORDERS ===== */}
+      {/* ===== ĐƠN HÀNG GẦN ĐÂY ===== */}
       <div className="bg-white rounded-xl shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Đơn hàng gần đây
+        </h2>
 
         <table className="w-full text-left">
           <thead>
             <tr className="border-b text-gray-500">
-              <th className="py-2">Order ID</th>
-              <th>Customer</th>
-              <th>Status</th>
-              <th>Total</th>
+              <th className="py-2">Mã đơn</th>
+              <th>Khách hàng</th>
+              <th>Trạng thái</th>
+              <th>Tổng tiền</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr className="border-b">
-              <td className="py-2">#001</td>
-              <td>Nguyen Van A</td>
-              <td className="text-green-600 font-medium">Completed</td>
-              <td>$120</td>
-            </tr>
-            <tr>
-              <td className="py-2">#002</td>
-              <td>Tran Thi B</td>
-              <td className="text-yellow-600 font-medium">Pending</td>
-              <td>$80</td>
-            </tr>
+            {recentOrders.map((order) => (
+              <tr key={order.id} className="border-b">
+                <td className="py-2">{order.id}</td>
+                <td>{order.customer}</td>
+                <td className={`${order.statusColor} font-medium`}>
+                  {order.status}
+                </td>
+                <td>{order.total}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -113,4 +111,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminOverview;

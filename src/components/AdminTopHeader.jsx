@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function AdminTopHeader() {
+function AdminTopHeader({title}) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
@@ -18,18 +18,21 @@ function AdminTopHeader() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const getTitle = () => {
-    if (location.pathname.includes("/dashboard/products")) {
-      return "Products";
-    }
-    if (location.pathname.includes("/dashboard/orders")) {
-      return "Orders";
-    }
-    if (location.pathname.includes("/dashboard")) {
-      return "Overview";
-    }
-    return "Admin Dashboard";
-  };
+  // const getTitle = () => {
+  //   if (location.pathname.includes("/dashboard/products")) {
+  //     return "Sản phẩm";
+  //   }
+  //   if (location.pathname.includes("/dashboard/orders")) {
+  //     return "Đơn hàng";
+  //   }
+  //   if (location.pathname.includes("/dashboard")) {
+  //     return "Tổng quan";
+  //   }
+  //    if (location.pathname.includes("/dashboard/profile")) {
+  //     return "Hồ sơ";
+  //   }
+  //   return "Admin Dashboard";
+  // };
 
   // 🚪 Logout
   const handleLogout = () => {
@@ -39,7 +42,7 @@ function AdminTopHeader() {
 
   return (
     <div className="flex justify-between items-center mb-8 relative">
-      <h1 className="text-3xl font-semibold text-gray-800">{getTitle()}</h1>
+      <h1 className="text-3xl font-semibold text-gray-800">{title}</h1>
 
       {/* Avatar */}
       <div

@@ -26,27 +26,7 @@ export const dashboardStats = [
   },
 ];
 
-/* ===== ĐƠN HÀNG GẦN ĐÂY ===== */
-export const recentOrders = [
-  {
-    id: "DH001",
-    customer: "Nguyễn Văn A",
-    status: "Hoàn thành",
-    total: "1.200.000 ₫",
-  },
-  {
-    id: "DH002",
-    customer: "Trần Thị B",
-    status: "Đang xử lý",
-    total: "800.000 ₫",
-  },
-  {
-    id: "DH003",
-    customer: "Lê Hoàng C",
-    status: "Đang giao",
-    total: "2.300.000 ₫",
-  },
-];
+
 
 /* ===== DANH SÁCH SẢN PHẨM ===== */
 export const productsMock = [
@@ -74,49 +54,86 @@ export const productsMock = [
 ];
 
 /* ===== DANH SÁCH ĐƠN HÀNG ===== */
+// src/data/adminMock.js (bổ sung)
 export const ordersMock = [
   {
-    id: "ORD001",
+    id: 1,
+    code: "ORD001",
     customer: "Nguyễn Văn A",
-    status: "Hoàn thành",
-    total: 1200000,
-    date: "2026-02-01",
+    total: 1250000,
+    status: "completed",
+    createdAt: "02/02/2026",
   },
   {
-    id: "ORD002",
+    id: 2,
+    code: "ORD002",
     customer: "Trần Thị B",
-    status: "Chưa hoàn thành",
-    total: 800000,
-    date: "2026-02-02",
+    total: 780000,
+    status: "pending",
+    createdAt: "03/02/2026",
   },
   {
-    id: "ORD003",
-    customer: "Lê Hoàng C",
-    status: "Đang giao",
-    total: 2300000,
-    date: "2026-02-03",
+    id: 3,
+    code: "ORD003",
+    customer: "Lê Văn C",
+    total: 2150000,
+    status: "cancelled",
+    createdAt: "04/02/2026",
   },
 ];
 
-/* ===== DATA CHO CHART (OVERVIEW) ===== */
-export const revenueChartData = [
-  { day: "T2", revenue: 3000000 },
-  { day: "T3", revenue: 4500000 },
-  { day: "T4", revenue: 2800000 },
-  { day: "T5", revenue: 5200000 },
-  { day: "T6", revenue: 6100000 },
-  { day: "T7", revenue: 7200000 },
-  { day: "CN", revenue: 4000000 },
+
+/* ===== OVERVIEW MOCK DATA ===== */
+
+export const revenueData = [
+  { day: "Thứ 2", revenue: 1200 },
+  { day: "Thứ 3", revenue: 2100 },
+  { day: "Thứ 4", revenue: 1800 },
+  { day: "Thứ 5", revenue: 2600 },
+  { day: "Thứ 6", revenue: 3200 },
+  { day: "Thứ 7", revenue: 2800 },
+  { day: "Chủ nhật", revenue: 3500 },
 ];
+
+export const orderStatusData = [
+  { name: "Hoàn thành", value: 68 },
+  { name: "Chờ xử lý", value: 32 },
+  { name: "Đang giao", value: 20 },
+];
+
+export const overviewStats = [
+  { title: "Tổng sản phẩm", value: "128" },
+  { title: "Đơn hàng hôm nay", value: "32" },
+  { title: "Khách hàng", value: "540" },
+  { title: "Doanh thu", value: "12.400.000 ₫" },
+];
+
+export const recentOrders = [
+  {
+    id: "#001",
+    customer: "Nguyễn Văn A",
+    status: "Hoàn thành",
+    total: "120.000 ₫",
+    statusColor: "text-green-600",
+  },
+  {
+    id: "#002",
+    customer: "Trần Thị B",
+    status: "Chờ xử lý",
+    total: "80.000 ₫",
+    statusColor: "text-yellow-600",
+  },
+];
+
 
 
 /* ======= HỒ SƠ ADMIN */
-export const adminInfo = {
-  name: "Nguyễn Văn Admin",
-  role: "Quản trị viên",
-  email: "admin@eyewear.vn",
+export const adminMock = {
+  id: 1,
+  name: "Admin Chính",
+  email: "admin@shop.vn",
   phone: "0909 123 456",
-  avatar: "https://i.pravatar.cc/150?img=12",
+  role: "Quản trị hệ thống",
 };
 
 
