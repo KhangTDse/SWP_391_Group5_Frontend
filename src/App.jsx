@@ -5,7 +5,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx"; // <--- 1. Import trang mới
 import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 import ShopPage from "./pages/ShopPage.jsx";
-import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminOverview from "./pages/AdminOverview";
 import StoreLayout from "./layout/StoreLayout";
 import AdminLayout from "./layout/AdminLayout";
 import AdminProducts from "./pages/AdminProducts.jsx";
@@ -14,8 +14,7 @@ import FrameSelectionPage from './pages/FrameSelectionPage';
 import PrescriptionPage from './pages/PrescriptionPage';
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
-import Header from './components/Header';
-import Footer from './components/Footer';
+import AdminProfile from "./pages/AdminProfile.jsx";
 
 function App() {
   return (
@@ -36,8 +35,8 @@ function App() {
         </Route>
 
         <Route element={<AdminLayout />}>
-          <Route path="/dashboard/" element={<AdminDashboard />} />
-          <Route path="/dashboard/products" element={<AdminProducts />} />
+          <Route path="/dashboard/" element={<AdminOverview />} />
+          <Route path="/dashboard/profile" element={<AdminProfile />} />
           <Route path="/dashboard/orders" element={<AdminOrders />} />
         </Route>
 
