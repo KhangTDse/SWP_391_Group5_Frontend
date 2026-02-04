@@ -13,6 +13,7 @@ import AdminOrders from "./pages/AdminOrder.jsx";
 import FrameSelectionPage from './pages/FrameSelectionPage';
 import PrescriptionPage from './pages/PrescriptionPage';
 import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="/frames" element={<FrameSelectionPage />} />
           <Route path="/prescription" element={<PrescriptionPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Route>
 
         <Route element={<AdminLayout />}>

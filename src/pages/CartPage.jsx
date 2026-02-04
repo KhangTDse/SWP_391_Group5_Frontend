@@ -52,19 +52,24 @@ function CartPage() {
     }, 0);
 
     // 6. Xử lý thanh toán (Demo)
+
     const handleCheckout = () => {
+        // 1. Kiểm tra giỏ hàng trống
         if (cartItems.length === 0) {
-            alert("Giỏ hàng đang trống!");
+            alert("Giỏ hàng trống!");
             return;
         }
-        const currentUser = localStorage.getItem("currentUser"); // Giả sử bạn lưu user khi login
+
+        // 2. Kiểm tra đăng nhập
+        const currentUser = localStorage.getItem("currentUser");
         if (!currentUser) {
             alert("Vui lòng đăng nhập để thanh toán!");
             navigate("/login");
             return;
         }
-        alert("Đang chuyển đến trang thanh toán...");
-        // Sau này sẽ navigate qua trang Checkout
+
+        // 3. Chuyển hướng sang trang Checkout (Thay vì alert như cũ)
+        navigate("/checkout");
     };
 
     // GIAO DIỆN: Nếu giỏ hàng trống
