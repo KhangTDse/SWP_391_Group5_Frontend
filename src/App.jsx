@@ -10,12 +10,11 @@ import StoreLayout from "./layout/StoreLayout";
 import AdminLayout from "./layout/AdminLayout";
 import AdminProducts from "./pages/AdminProducts.jsx";
 import AdminOrders from "./pages/AdminOrder.jsx";
-import FrameSelectionPage from './pages/FrameSelectionPage';
-import PrescriptionPage from './pages/PrescriptionPage';
+import FrameSelectionPage from "./pages/FrameSelectionPage";
+import PrescriptionPage from "./pages/PrescriptionPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import AdminProfile from "./pages/AdminProfile.jsx";
-
 function App() {
   return (
     <div>
@@ -33,17 +32,13 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
         </Route>
-
         <Route element={<AdminLayout />}>
           <Route path="/dashboard/" element={<AdminOverview />} />
           <Route path="/dashboard/profile" element={<AdminProfile />} />
           <Route path="/dashboard/products" element={<AdminProducts />} />
           <Route path="/dashboard/orders" element={<AdminOrders />} />
-        
         </Route>
-
       </Routes>
-   
     </div>
   );
 }
