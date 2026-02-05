@@ -34,10 +34,13 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
       className={`
         sticky top-0 z-40
         transition-all duration-300
-        ${scrolled ? "backdrop-blur-md bg-white/80 shadow-sm" : "bg-transparent"}
+       backdrop-blur-md
+        ${scrolled ? "bg-white shadow-sm" : "bg-transparent"}
+
       `}
     >
-      <div className="px-6 pt-4">
+      {/* 👇 THÊM pb-6 Ở ĐÂY */}
+      <div className="px-6 pt-4 pb-6">
         {/* TOP ROW */}
         <div className="flex justify-between items-center">
           {/* TITLE + BREADCRUMB */}
@@ -55,12 +58,13 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
               </motion.h1>
             </AnimatePresence>
 
-            {/* Breadcrumb */}
             {breadcrumb.length > 0 && (
               <div className="mt-1 flex items-center text-xs text-gray-500 gap-1">
                 {breadcrumb.map((item, index) => (
                   <span key={index} className="flex items-center gap-1">
-                    {index !== 0 && <FiChevronRight className="text-gray-400" />}
+                    {index !== 0 && (
+                      <FiChevronRight className="text-gray-400" />
+                    )}
                     <span>{item}</span>
                   </span>
                 ))}
@@ -81,11 +85,10 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
                 type="text"
                 placeholder="Tìm kiếm..."
                 className="
-                  w-56 pl-9 pr-3 py-1.5 text-sm
+                  w-52 pl-9 pr-3 py-1.5 text-sm
                   rounded-lg border border-gray-200
                   bg-gray-50
                   focus:outline-none focus:ring-2 focus:ring-blue-500
-                  transition
                 "
               />
             </div>
@@ -93,7 +96,7 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
             {/* DIVIDER */}
             <div className="h-6 w-px bg-gray-200" />
 
-            {/* USER MENU */}
+            {/* USER */}
             <div
               ref={menuRef}
               className="relative flex items-center gap-2 cursor-pointer select-none"
@@ -102,7 +105,7 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
               <img
                 src="https://www.shutterstock.com/image-photo/create-imageiphone-memoji-avatar-style-600nw-2683889647.jpg"
                 alt="admin"
-                className="w-8 h-8 rounded-full ring-1 ring-transparent hover:ring-blue-500 transition"
+                className="w-8 h-8 rounded-full hover:ring-2 hover:ring-blue-500 transition"
               />
 
               <div className="hidden sm:block text-xs leading-tight">
@@ -124,7 +127,7 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="px-4 py-2">
-                  <p className="font-medium text-sm text-gray-800">Hoang Vo</p>
+                  <p className="font-medium text-sm">Hoang Vo</p>
                   <p className="text-xs text-gray-500">admin@eyewear.com</p>
                 </div>
 
@@ -132,14 +135,14 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
 
                 <button
                   onClick={() => navigate("/dashboard/profile")}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition"
+                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
                 >
                   Hồ sơ
                 </button>
 
                 <button
                   onClick={() => navigate("/login")}
-                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition rounded-b-lg"
+                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 rounded-b-lg"
                 >
                   Đăng xuất
                 </button>
@@ -148,8 +151,8 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
           </div>
         </div>
 
-        {/* BOTTOM DIVIDER */}
-        <div className="mt-3 h-px bg-gray-200" />
+        {/* Divider */}
+        <div className="mt-4 h-px bg-gray-200" />
       </div>
     </div>
   );

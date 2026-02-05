@@ -26,8 +26,6 @@ export const dashboardStats = [
   },
 ];
 
-
-
 /* ===== DANH SÁCH SẢN PHẨM ===== */
 export const productsMock = [
   {
@@ -53,8 +51,7 @@ export const productsMock = [
   },
 ];
 
-/* ===== DANH SÁCH ĐƠN HÀNG ===== */
-// src/data/adminMock.js (bổ sung)
+/* ===== DANH SÁCH ĐƠN HÀNG (FULL) ===== */
 export const ordersMock = [
   {
     id: 1,
@@ -82,9 +79,7 @@ export const ordersMock = [
   },
 ];
 
-
-/* ===== OVERVIEW MOCK DATA ===== */
-
+/* ===== OVERVIEW CHART ===== */
 export const revenueData = [
   { day: "Thứ 2", revenue: 1200 },
   { day: "Thứ 3", revenue: 2100 },
@@ -101,33 +96,67 @@ export const orderStatusData = [
   { name: "Đang giao", value: 20 },
 ];
 
+/* ===== OVERVIEW STATS (STAT CARD) ===== */
 export const overviewStats = [
-  { title: "Tổng sản phẩm", value: "128" },
-  { title: "Đơn hàng hôm nay", value: "32" },
-  { title: "Khách hàng", value: "540" },
-  { title: "Doanh thu", value: "12.400.000 ₫" },
+  {
+    title: "Tổng sản phẩm",
+    value: "128",
+    percent: "+4.2%",
+    trend: "up",
+    icon: "box",
+  },
+  {
+    title: "Đơn hàng hôm nay",
+    value: "32",
+    percent: "-1.8%",
+    trend: "down",
+    icon: "shopping",
+  },
+  {
+    title: "Khách hàng",
+    value: "540",
+    percent: "+6.1%",
+    trend: "up",
+    icon: "users",
+  },
+  {
+    title: "Doanh thu",
+    value: "12.400.000 ₫",
+    percent: "+12.5%",
+    trend: "up",
+    icon: "wallet",
+  },
 ];
 
+/* ===== RECENT ORDERS (TABLE) ===== */
 export const recentOrders = [
   {
     id: "#001",
     customer: "Nguyễn Văn A",
-    status: "Hoàn thành",
+    status: "completed",
+    statusLabel: "Hoàn thành",
     total: "120.000 ₫",
-    statusColor: "text-green-600",
+    statusBorder: "border-green-500",
   },
   {
     id: "#002",
     customer: "Trần Thị B",
-    status: "Chờ xử lý",
+    status: "pending",
+    statusLabel: "Chờ xử lý",
     total: "80.000 ₫",
-    statusColor: "text-yellow-600",
+    statusBorder: "border-yellow-500",
+  },
+  {
+    id: "#003",
+    customer: "Lê Văn C",
+    status: "cancelled",
+    statusLabel: "Đã huỷ",
+    total: "150.000 ₫",
+    statusBorder: "border-red-500",
   },
 ];
 
-
-
-/* ======= HỒ SƠ ADMIN */
+/* ===== ADMIN PROFILE ===== */
 export const adminMock = {
   id: 1,
   name: "Admin Chính",
@@ -135,6 +164,3 @@ export const adminMock = {
   phone: "0909 123 456",
   role: "Quản trị hệ thống",
 };
-
-
-
