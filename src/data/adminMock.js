@@ -159,8 +159,11 @@ export const recentOrders = [
 /* ===== ADMIN PROFILE ===== */
 export const adminMock = {
   id: 1,
-  name: "Admin Chính",
-  email: "admin@shop.vn",
-  phone: "0909 123 456",
+  name: "Võ Dương Hoàng",
+  email: "hoangvo@admin.com",
+  password: "123",
+  phone: "0787565699",
   role: "Quản trị hệ thống",
+  img: "https://www.shutterstock.com/image-photo/create-imageiphone-memoji-avatar-style-600nw-2683889647.jpg",
+  address:"39A đường 149C, Long Trường, Thủ Đức, Thành Phố Hồ Chí Minh"
 };

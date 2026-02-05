@@ -2,12 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiSearch, FiChevronRight } from "react-icons/fi";
+import { adminMock } from "../data/adminMock";
 
 function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+
+  const admin = adminMock;
 
   // Click outside dropdown
   useEffect(() => {
@@ -34,12 +37,10 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
       className={`
         sticky top-0 z-40
         transition-all duration-300
-       backdrop-blur-md
+        backdrop-blur-md
         ${scrolled ? "bg-white shadow-sm" : "bg-transparent"}
-
       `}
     >
-      {/* 👇 THÊM pb-6 Ở ĐÂY */}
       <div className="px-6 pt-4 pb-6">
         {/* TOP ROW */}
         <div className="flex justify-between items-center">
@@ -103,14 +104,13 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
               onClick={() => setOpen((prev) => !prev)}
             >
               <img
-                src="https://www.shutterstock.com/image-photo/create-imageiphone-memoji-avatar-style-600nw-2683889647.jpg"
-                alt="admin"
-                className="w-8 h-8 rounded-full hover:ring-2 hover:ring-blue-500 transition"
+                src={admin.img}
+                alt={admin.name}
+                className="w-8 h-8 rounded-full object-cover hover:ring-2 hover:ring-blue-500 transition"
               />
 
               <div className="hidden sm:block text-xs leading-tight">
-                <p className="font-medium text-gray-800">Hoang Vo</p>
-                <p className="text-gray-500">admin@eyewear.com</p>
+                <p className="font-medium text-gray-800">{admin.name}</p>
               </div>
 
               {/* DROPDOWN */}
@@ -122,13 +122,12 @@ function AdminTopHeader({ title, subtitle, breadcrumb = [] }) {
                     : { opacity: 0, scale: 0.96, y: -4 }
                 }
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 top-11 w-52 bg-white rounded-lg shadow-xl border border-gray-200 z-50 origin-top-right"
+                className="absolute right-0 top-11 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50 origin-top-right"
                 style={{ pointerEvents: open ? "auto" : "none" }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="px-4 py-2">
-                  <p className="font-medium text-sm">Hoang Vo</p>
-                  <p className="text-xs text-gray-500">admin@eyewear.com</p>
+                <div className="px-4 py-3">
+                  <p className="font-medium text-sm">{admin.email}</p>
                 </div>
 
                 <div className="h-px bg-gray-200 mx-4" />
