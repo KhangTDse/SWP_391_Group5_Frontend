@@ -9,157 +9,135 @@ import {
   FiUser,
 } from "react-icons/fi";
 
-const baseItem =
-  "relative flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all";
+const navItem =
+  "relative flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition";
 
 function AdminSidebar() {
+  const [openStore, setOpenStore] = useState(true);
   const location = useLocation();
-  const [openProduct, setOpenProduct] = useState(true);
 
-  // Kiểm tra đang ở route con của quản lý cửa hàng không
-  const isProductActive =
-    location.pathname.startsWith("/dashboard/products") ||
-    location.pathname.startsWith("/dashboard/orders");
-
+  // tự mở submenu nếu đang ở route con
   useEffect(() => {
-    if (isProductActive) setOpenProduct(true);
-  }, [isProductActive]);
+    if (location.pathname.includes("/dashboard/products") ||
+        location.pathname.includes("/dashboard/orders")) {
+      setOpenStore(true);
+    }
+  }, [location.pathname]);
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r px-5 py-6">
-      {/* Logo */}
-      <h1 className="text-2xl font-bold text-blue-600 mb-4">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-gray-50 border-r border-gray-200 px-5 py-6">
+      {/* LOGO */}
+      <h1 className="text-xl font-semibold tracking-tight text-gray-900">
         Falcon Eyewear
       </h1>
 
       {/* Divider */}
-      <div className="h-px bg-gray-200 mb-6" />
+      <div className="my-5 h-px bg-gray-200" />
 
-      {/* Menu label */}
-      <p className="text-xs text-gray-400 uppercase mb-3 tracking-wider">
+      {/* MENU */}
+      <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">
         Menu
       </p>
 
-      <nav className="space-y-1.5">
-        {/* Tổng quan */}
-        <NavLink to="/dashboard" end className={({ isActive }) =>
-          `${baseItem} ${
-            isActive
-              ? "bg-blue-50 text-blue-600 font-medium"
-              : "text-gray-700 hover:bg-gray-100"
-          }`
-        }>
-          {({ isActive }) => (
-            <>
-              {isActive && (
-                <motion.span
-                  layoutId="active-indicator"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r bg-blue-600"
-                />
-              )}
-              <FiGrid size={18} />
-              Tổng quan
-            </>
-          )}
-        </NavLink>
-
-        {/* Quản lý cửa hàng */}
-        <div>
-          <button
-            onClick={() => setOpenProduct(!openProduct)}
-            className={`${baseItem} w-full justify-between ${
-              isProductActive
-                ? "bg-blue-50 text-blue-600 font-medium"
-                : "text-gray-700 hover:bg-gray-100"
-            }`}
-          >
-            {isProductActive && (
+      {/* Tổng quan */}
+      <NavLink to="/dashboard" end className={({ isActive }) =>
+        `${navItem} ${isActive ? "text-blue-600 font-medium" : "text-gray-700 hover:bg-gray-100"}`
+      }>
+        {({ isActive }) => (
+          <>
+            {isActive && (
               <motion.span
-                layoutId="active-indicator"
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r bg-blue-600"
+                layoutId="active-pill"
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-blue-600"
               />
             )}
+            <FiGrid size={18} />
+            Tổng quan
+          </>
+        )}
+      </NavLink>
 
-            <div className="flex items-center gap-3">
-              <FiBox size={18} />
-              Quản lý cửa hàng
-            </div>
-
-            <motion.span
-              animate={{ rotate: openProduct ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <FiChevronDown />
-            </motion.span>
-          </button>
-
-          {/* Sub menu */}
-          <AnimatePresence>
-            {openProduct && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="relative ml-6 mt-2 pl-4 space-y-1 overflow-hidden border-l border-gray-200"
-              >
-                <NavLink
-                  to="/dashboard/products"
-                  className={({ isActive }) =>
-                    `${baseItem} ${
-                      isActive
-                        ? "text-blue-600 font-medium"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`
-                  }
-                >
-                  <FiBox size={16} />
-                  Sản phẩm
-                </NavLink>
-
-                <NavLink
-                  to="/dashboard/orders"
-                  className={({ isActive }) =>
-                    `${baseItem} ${
-                      isActive
-                        ? "text-blue-600 font-medium"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`
-                  }
-                >
-                  <FiShoppingCart size={16} />
-                  Đơn hàng
-                </NavLink>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Hồ sơ */}
-        <NavLink
-          to="/dashboard/profile"
-          className={({ isActive }) =>
-            `${baseItem} ${
-              isActive
-                ? "bg-blue-50 text-blue-600 font-medium"
-                : "text-gray-700 hover:bg-gray-100"
-            }`
-          }
+      {/* Quản lý cửa hàng */}
+      <div className="mt-1">
+        <button
+          onClick={() => setOpenStore(!openStore)}
+          className="relative flex w-full items-center justify-between px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition"
         >
-          {({ isActive }) => (
-            <>
-              {isActive && (
-                <motion.span
-                  layoutId="active-indicator"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r bg-blue-600"
-                />
-              )}
-              <FiUser size={18} />
-              Hồ sơ
-            </>
+          <div className="flex items-center gap-3">
+            <FiBox size={18} />
+            <span className="text-sm font-medium">Quản lý cửa hàng</span>
+          </div>
+
+          <motion.span
+            animate={{ rotate: openStore ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FiChevronDown />
+          </motion.span>
+
+          {(location.pathname.includes("/products") ||
+            location.pathname.includes("/orders")) && (
+            <motion.span
+              layoutId="active-pill"
+              className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-blue-600"
+            />
           )}
-        </NavLink>
-      </nav>
+        </button>
+
+        <AnimatePresence>
+          {openStore && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="ml-6 mt-1 space-y-1 overflow-hidden"
+            >
+              <NavLink to="/dashboard/products" className={({ isActive }) =>
+                `${navItem} pl-6 ${
+                  isActive
+                    ? "bg-blue-50 text-blue-600 font-medium"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`
+              }>
+                <FiBox size={16} />
+                Sản phẩm
+              </NavLink>
+
+              <NavLink to="/dashboard/orders" className={({ isActive }) =>
+                `${navItem} pl-6 ${
+                  isActive
+                    ? "bg-blue-50 text-blue-600 font-medium"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`
+              }>
+                <FiShoppingCart size={16} />
+                Đơn hàng
+              </NavLink>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Hồ sơ */}
+      <NavLink to="/dashboard/profile" className={({ isActive }) =>
+        `${navItem} mt-2 ${
+          isActive ? "text-blue-600 font-medium" : "text-gray-700 hover:bg-gray-100"
+        }`
+      }>
+        {({ isActive }) => (
+          <>
+            {isActive && (
+              <motion.span
+                layoutId="active-pill"
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-blue-600"
+              />
+            )}
+            <FiUser size={18} />
+            Hồ sơ
+          </>
+        )}
+      </NavLink>
     </aside>
   );
 }
