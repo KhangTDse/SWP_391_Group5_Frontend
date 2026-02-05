@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom"; // Thêm useLocation
-
+import {adminMock} from "../data/adminMock";
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -11,7 +11,7 @@ function LoginPage() {
     // Ví dụ: từ Cart sang -> from sẽ là "/cart"
     const from = location.state?.from || "/";
 
-    const adminAccount = { email: "admin@gmail.com", password: "123456", role: "admin" };
+    const adminAccount = adminMock;
 
     useEffect(() => {
         document.body.style.overflow = "hidden";

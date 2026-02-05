@@ -1,37 +1,101 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { productsMock } from "../data/adminMock";
-import { FiPlus, FiSearch, FiEdit2, FiTrash2 } from "react-icons/fi";
+import {
+  FiPlus,
+  FiSearch,
+  FiEdit2,
+  FiTrash2,
+  FiPackage,
+} from "react-icons/fi";
 import AdminTopHeader from "../components/AdminTopHeader";
 
 function AdminProducts() {
   const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
   const [products] = useState(productsMock);
 
-  const filteredProducts = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  /* ===== CATEGORY LIST ===== */
+  const categories = useMemo(() => {
+    const set = new Set(products.map((p) => p.category));
+    return ["all", ...Array.from(set)];
+  }, [products]);
+
+  /* ===== FILTER ===== */
+  const filteredProducts = products.filter((p) => {
+    const matchName = p.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchCategory =
+      category === "all" || p.category === category;
+    return matchName && matchCategory;
+  });
+
+  /* ===== STOCK UI ===== */
+  const renderStock = (stock) => {
+    if (stock === 0) {
+      return (
+        <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+          Hết hàng
+        </span>
+      );
+    }
+
+    if (stock <= 10) {
+      return (
+        <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+          Sắp hết ({stock})
+        </span>
+      );
+    }
+
+    return (
+      <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+        Còn hàng ({stock})
+      </span>
+    );
+  };
 
   return (
-    <div className="ml-64 p-8 bg-gray-50 min-h-screen font-admin">
-      <AdminTopHeader title="Sản phẩm"/>
-      
-      {/* ===== CARD WRAPPER ===== */}
-      <div className="bg-white rounded-xl shadow p-6">
-        {/* ===== TOP BAR ===== */}
-        <div className="flex items-center justify-between mb-6">
-          {/* SEARCH */}
-          <div className="relative w-72">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Tìm sản phẩm..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+    <div className="ml-64 px-8 pt-6 pb-12 bg-gray-50 min-h-screen">
+      {/* ===== HEADER ===== */}
+      <AdminTopHeader
+        title="Sản phẩm"
+        subtitle="Quản lý danh sách sản phẩm trong cửa hàng"
+        breadcrumb={["Dashboard", "Sản phẩm"]}
+      />
+
+      {/* ===== CARD ===== */}
+      <div className="mt-8 bg-white rounded-2xl border border-gray-200 p-6">
+        {/* ===== TOOLBAR ===== */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            {/* SEARCH */}
+            <div className="relative w-72">
+              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Tìm theo tên sản phẩm..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* CATEGORY */}
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {categories.map((c) => (
+                <option key={c} value={c}>
+                  {c === "all" ? "Tất cả danh mục" : c}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* ADD BUTTON */}
+          {/* ADD */}
           <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
             <FiPlus />
             Thêm sản phẩm
@@ -39,9 +103,9 @@ function AdminProducts() {
         </div>
 
         {/* ===== TABLE ===== */}
-        <div className="overflow-hidden rounded-lg border">
+        <div className="overflow-hidden rounded-xl border border-gray-200">
           <table className="w-full text-sm">
-            <thead className="bg-gray-100 text-gray-600">
+            <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <th className="text-left px-6 py-3">Sản phẩm</th>
                 <th className="text-left px-6 py-3">Danh mục</th>
@@ -65,20 +129,12 @@ function AdminProducts() {
                     {product.category}
                   </td>
 
-                  <td className="px-6 py-4 text-right font-medium">
+                  <td className="px-6 py-4 text-right font-semibold">
                     {product.price.toLocaleString()} ₫
                   </td>
 
                   <td className="px-6 py-4 text-center">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        product.stock > 10
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
-                      {product.stock}
-                    </span>
+                    {renderStock(product.stock)}
                   </td>
 
                   {/* ACTION */}
@@ -97,8 +153,11 @@ function AdminProducts() {
 
               {filteredProducts.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="text-center py-10 text-gray-500">
-                    Không tìm thấy sản phẩm
+                  <td colSpan={5} className="py-14 text-center">
+                    <div className="flex flex-col items-center gap-3 text-gray-400">
+                      <FiPackage className="text-3xl" />
+                      <p>Không tìm thấy sản phẩm phù hợp</p>
+                    </div>
                   </td>
                 </tr>
               )}
