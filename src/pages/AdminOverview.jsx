@@ -19,18 +19,21 @@ import {
   recentOrders,
 } from "../data/adminMock";
 
-/* ===== STATUS UI MAP (FRONTEND QUYẾT ĐỊNH) ===== */
+/* ===== STATUS UI MAP (FRONTEND TỰ QUYẾT) ===== */
 const statusMap = {
   completed: {
     label: "Hoàn thành",
+    color: "#22c55e",
     className: "bg-green-50 text-green-700 border-green-200",
   },
   pending: {
     label: "Chờ xử lý",
+    color: "#facc15",
     className: "bg-yellow-50 text-yellow-700 border-yellow-200",
   },
   cancelled: {
     label: "Đã huỷ",
+    color: "#ef4444",
     className: "bg-red-50 text-red-700 border-red-200",
   },
 };
@@ -54,7 +57,7 @@ function AdminOverview() {
 
       {/* ===== CHARTS ===== */}
       <section className="mt-10 grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Revenue */}
+        {/* ===== REVENUE CHART ===== */}
         <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-200 p-6">
           <h2 className="text-base font-semibold text-gray-800 mb-1">
             Doanh thu theo tuần
@@ -94,7 +97,7 @@ function AdminOverview() {
           </ResponsiveContainer>
         </div>
 
-        {/* Order Status */}
+        {/* ===== ORDER STATUS CHART ===== */}
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
           <h2 className="text-base font-semibold text-gray-800 mb-1">
             Trạng thái đơn hàng
@@ -103,10 +106,17 @@ function AdminOverview() {
 
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={orderStatusData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="name" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />
               <Tooltip />
-              <Bar dataKey="value" fill="#22c55e" radius={[6, 6, 0, 0]} />
+
+              <Bar
+                dataKey="value"
+                fill="#22c55e" // xanh lá
+                radius={[6, 6, 0, 0]}
+                isAnimationActive
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
