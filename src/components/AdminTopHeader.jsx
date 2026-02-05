@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function AdminTopHeader({title}) {
+function AdminTopHeader({ title }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
@@ -18,65 +18,61 @@ function AdminTopHeader({title}) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // const getTitle = () => {
-  //   if (location.pathname.includes("/dashboard/products")) {
-  //     return "Sản phẩm";
-  //   }
-  //   if (location.pathname.includes("/dashboard/orders")) {
-  //     return "Đơn hàng";
-  //   }
-  //   if (location.pathname.includes("/dashboard")) {
-  //     return "Tổng quan";
-  //   }
-  //    if (location.pathname.includes("/dashboard/profile")) {
-  //     return "Hồ sơ";
-  //   }
-  //   return "Admin Dashboard";
-  // };
-
-  // 🚪 Logout
   const handleLogout = () => {
-    localStorage.removeItem("user"); // clear mock login
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
   return (
     <div className="flex justify-between items-center mb-8 relative">
+      {/* Title */}
       <h1 className="text-3xl font-semibold text-gray-800">{title}</h1>
 
-      {/* Avatar */}
+      {/* Avatar + Info */}
       <div
         ref={menuRef}
         className="relative flex items-center gap-3 cursor-pointer select-none"
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((prev) => !prev)}
       >
         <img
-          src="https://i.pravatar.cc/40"
+          src="https://www.shutterstock.com/image-photo/create-imageiphone-memoji-avatar-style-600nw-2683889647.jpg"
           alt="admin"
-          className="rounded-full w-10 h-10"
+          className="rounded-full w-10 h-10 ring-2 ring-transparent hover:ring-blue-500 transition"
         />
 
-        <div className="text-sm text-left">
-          <p className="font-medium">Admin</p>
+        <div className="text-sm text-left hidden sm:block">
+          <p className="font-medium text-gray-800">Hoang Vo</p>
           <p className="text-gray-500">admin@eyewear.com</p>
         </div>
 
         {/* Dropdown */}
-        {open && (
-          <div className="absolute right-0 top-14 w-48 bg-white border rounded-lg shadow-lg overflow-hidden z-50">
-            <div className="px-4 py-3 border-b">
-              <p className="font-medium text-sm">Admin</p>
-              <p className="text-xs text-gray-500">admin@eyewear.com</p>
-            </div>
-
-            <button
-              onClick={handleLogout}
-              className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-            >
-              🚪 Đăng xuất
-            </button>
+        <div
+          className={`
+            absolute right-0 top-14 w-56 bg-white rounded-xl shadow-xl border border-gray-200 z-50
+            origin-top-right transition-all duration-200 ease-out
+            ${open ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}
+          `}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* User info */}
+          <div className="px-4 py-3">
+            <p className="font-medium text-sm text-gray-800">Hoang Vo</p>
+            <p className="text-xs text-gray-500">admin@eyewear.com</p>
           </div>
-        )}
+
+          {/* Divider */}
+          <div className="h-px bg-gray-200 mx-4" />
+
+          {/* Actions */}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600
+                       hover:bg-red-50 transition rounded-b-xl"
+          >
+            🚪
+            <span>Đăng xuất</span>
+          </button>
+        </div>
       </div>
     </div>
   );
