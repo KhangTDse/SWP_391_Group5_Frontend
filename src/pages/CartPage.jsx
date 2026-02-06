@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Thêm useLocation
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function CartPage() {
     const navigate = useNavigate();
-    const location = useLocation(); // Hook lấy vị trí hiện tại
+    const location = useLocation();
     const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
@@ -61,8 +61,8 @@ function CartPage() {
             return;
         }
 
-        // ĐÃ LOGIN -> Sang trang Checkout
-        navigate("/checkout");
+        // ĐÃ LOGIN -> Sang trang Payment (Thay vì Checkout cũ)
+        navigate("/payment");
     };
 
     if (cartItems.length === 0) {
