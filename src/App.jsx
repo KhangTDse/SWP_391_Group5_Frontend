@@ -14,15 +14,10 @@ import FrameSelectionPage from "./pages/FrameSelectionPage";
 import PrescriptionPage from "./pages/PrescriptionPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
-NVK
-import PaymentPage from './pages/PaymentPage';
-import OrderSuccessPage from './pages/OrderSuccessPage';
-import Header from './components/Header';
-import Footer from './components/Footer';
-
+import PaymentPage from "./pages/PaymentPage";
+import OrderSuccessPage from "./pages/OrderSuccessPage";
 
 import AdminProfile from "./pages/AdminProfile.jsx";
-main
 function App() {
   return (
     <div>
