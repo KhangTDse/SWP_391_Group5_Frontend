@@ -34,6 +34,7 @@ export const productsMock = [
     category: "Gọng kính",
     price: 950000,
     stock: 12,
+    img: "https://picsum.photos/seed/frame1/400/400",
   },
   {
     id: 2,
@@ -41,6 +42,7 @@ export const productsMock = [
     category: "Tròng kính",
     price: 1200000,
     stock: 20,
+    img: "https://picsum.photos/seed/lens1/400/400",
   },
   {
     id: 3,
@@ -48,6 +50,84 @@ export const productsMock = [
     category: "Gọng kính",
     price: 750000,
     stock: 8,
+    img: "https://picsum.photos/seed/frame2/400/400",
+  },
+
+  /* =========================
+     THÊM SẢN PHẨM MỚI
+  ========================= */
+
+  {
+    id: 4,
+    name: "Kính mát thời trang KM-01",
+    category: "Kính mát",
+    price: 1350000,
+    stock: 18,
+    img: "https://picsum.photos/seed/sunglass1/400/400",
+  },
+  {
+    id: 5,
+    name: "Kính mát cao cấp KM-02",
+    category: "Kính mát",
+    price: 1850000,
+    stock: 10,
+    img: "https://picsum.photos/seed/sunglass2/400/400",
+  },
+  {
+    id: 6,
+    name: "Gọng kính Titanium HMK-03",
+    category: "Gọng kính",
+    price: 1650000,
+    stock: 6,
+    img: "https://picsum.photos/seed/frame3/400/400",
+  },
+  {
+    id: 7,
+    name: "Gọng kính vuông thời trang",
+    category: "Gọng kính",
+    price: 890000,
+    stock: 14,
+    img: "https://picsum.photos/seed/frame4/400/400",
+  },
+  {
+    id: 8,
+    name: "Tròng kính siêu mỏng 1.67",
+    category: "Tròng kính",
+    price: 1450000,
+    stock: 22,
+    img: "https://picsum.photos/seed/lens2/400/400",
+  },
+  {
+    id: 9,
+    name: "Tròng kính đổi màu",
+    category: "Tròng kính",
+    price: 1750000,
+    stock: 9,
+    img: "https://picsum.photos/seed/lens3/400/400",
+  },
+  {
+    id: 10,
+    name: "Kính mát Polarized KM-03",
+    category: "Kính mát",
+    price: 2100000,
+    stock: 5,
+    img: "https://picsum.photos/seed/sunglass3/400/400",
+  },
+  {
+    id: 11,
+    name: "Kính mát thể thao KM-04",
+    category: "Kính mát",
+    price: 990000,
+    stock: 16,
+    img: "https://picsum.photos/seed/sunglass4/400/400",
+  },
+  {
+    id: 12,
+    name: "Gọng kính trẻ em HMK-05",
+    category: "Gọng kính",
+    price: 550000,
+    stock: 25,
+    img: "https://picsum.photos/seed/frame5/400/400",
   },
 ];
 

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiGrid, FiBox, FiShoppingCart, FiUser } from "react-icons/fi";
 
 const navItem =
@@ -20,7 +20,6 @@ function AdminSidebar({ collapsed }) {
     >
       {({ isActive }) => (
         <>
-          {/* Active Indicator */}
           {isActive && (
             <motion.span
               layoutId="active-pill"
@@ -28,18 +27,21 @@ function AdminSidebar({ collapsed }) {
             />
           )}
 
-          {/* Icon box cố định để không nhảy */}
           <div className="w-6 flex justify-center items-center">{icon}</div>
 
-          {/* Label */}
-          {!collapsed && <span>{label}</span>}
-
-          {/* Tooltip khi collapsed */}
-          {collapsed && (
-            <div className="absolute left-16 whitespace-nowrap rounded-md bg-gray-900 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition">
-              {label}
-            </div>
-          )}
+          {/* Animate label thay vì render thẳng */}
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.span
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                {label}
+              </motion.span>
+            )}
+          </AnimatePresence>
         </>
       )}
     </NavLink>
@@ -47,33 +49,43 @@ function AdminSidebar({ collapsed }) {
 
   return (
     <motion.aside
+      layout
       animate={{ width: collapsed ? 80 : 256 }}
-      transition={{ duration: 0.25 }}
-      className="h-screen bg-white border-r border-gray-200 flex flex-col"
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 25,
+      }}
+      className="h-screen bg-white border-r border-gray-200 flex flex-col overflow-hidden"
     >
       {/* ===== BRAND ===== */}
-      <div className="h-20 flex items-center justify-center border-b border-gray-100">
-        {collapsed ? (
-          // Logo khi thu nhỏ
-          <motion.img
-            key="logo"
-            src="https://tse1.mm.bing.net/th/id/OIP.VNNzIRDW9nZsWGt1vmCCXwHaFL?rs=1&pid=ImgDetMain&o=7&rm=3" // 👈 đổi path logo của bạn
+      <div className="h-20 flex items-center border-b border-gray-100 px-4">
+        <motion.div
+          layout
+          className={`flex items-center gap-2 w-full ${
+            collapsed ? "justify-center" : "justify-start"
+          }`}
+        >
+          <img
+            src="https://tse1.mm.bing.net/th/id/OIP.VNNzIRDW9nZsWGt1vmCCXwHaFL?rs=1&pid=ImgDetMain&o=7&rm=3"
             alt="Falcon"
             className="w-8 h-8 object-contain"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
           />
-        ) : (
-          // Text khi mở rộng
-          <motion.h1
-            key="text"
-            className="text-lg font-semibold text-gray-900 tracking-tight"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            Falcon Eyewear
-          </motion.h1>
-        )}
+
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.h1
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+                className="text-lg font-semibold text-gray-900 tracking-tight whitespace-nowrap"
+              >
+                Falcon Eyewear
+              </motion.h1>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {/* ===== MENU ===== */}
