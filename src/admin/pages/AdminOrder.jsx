@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FiSearch, FiEye, FiShoppingBag } from "react-icons/fi";
 import { ordersMock } from "../data/adminMock";
+import ViewOrderDetailsModal from "../modal/ViewOrderDetailModel";
 
 const statusMap = {
   completed: {
@@ -24,8 +24,10 @@ function AdminOrders() {
   const [sortOrder, setSortOrder] = useState("default"); // default | asc | desc
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [hoveredOrderId, setHoveredOrderId] = useState(null);
+
   const itemsPerPage = 5;
-  const navigate = useNavigate();
 
   /* ================= FILTER + SORT ================= */
   const filteredOrders = useMemo(() => {
@@ -211,17 +213,24 @@ function AdminOrders() {
                       <td className="px-6 py-4 text-center text-gray-500">
                         {order.createdAt}
                       </td>
-
                       <td className="px-6 py-4">
-                        <div className="flex justify-end">
+                        <div
+                          className="flex justify-end relative"
+                          onMouseEnter={() => setHoveredOrderId(order.id)}
+                          onMouseLeave={() => setHoveredOrderId(null)}
+                        >
                           <button
-                            onClick={() =>
-                              navigate(`/dashboard/orders/${order.id}`)
-                            }
+                            onClick={() => setSelectedOrder(order)}
                             className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition"
                           >
                             <FiEye size={16} />
                           </button>
+
+                          {hoveredOrderId === order.id && (
+                            <div className="absolute right-0 top-10 bg-black text-white text-xs px-3 py-1 rounded shadow-md whitespace-nowrap z-50">
+                              Xem nhanh đơn hàng
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -287,6 +296,17 @@ function AdminOrders() {
           </div>
         )}
       </div>
+
+      <ViewOrderDetailsModal
+        order={selectedOrder}
+        onClose={() => setSelectedOrder(null)}
+        onUpdateStatus={(newStatus) =>
+          setSelectedOrder((prev) => ({
+            ...prev,
+            status: newStatus,
+          }))
+        }
+      />
     </div>
   );
 }
