@@ -7,9 +7,11 @@ import {
   FiShield,
   FiMapPin,
   FiX,
+  FiGithub,
+  FiFacebook,
+  FiGlobe,
 } from "react-icons/fi";
 import { adminMock } from "../data/adminMock";
-import AdminTopHeader from "../components/AdminTopHeader";
 
 function AdminProfile() {
   const [admin, setAdmin] = useState(adminMock);
@@ -31,147 +33,197 @@ function AdminProfile() {
   };
 
   return (
-    <div className="ml-64 px-8 pt-6 pb-12 bg-gray-50 min-h-screen">
-      {/* ===== HEADER ===== */}
-      <AdminTopHeader
-        title="Hồ sơ"
-        subtitle="Thông tin tài khoản quản trị viên"
-        breadcrumb={["Dashboard", "Hồ sơ"]}
-      />
-
-      {/* ===== CARD ===== */}
-      <div className="mt-8 bg-white rounded-2xl border border-gray-200 p-6 max-w-5xl">
-        {/* ===== TOP ===== */}
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-5">
-            {/* AVATAR */}
-            {admin.img ? (
-              <img
-                src={admin.img}
-                alt={admin.name}
-                className="w-20 h-20 rounded-full object-cover border"
-              />
-            ) : (
-              <div className="w-20 h-20 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-3xl font-bold">
-                {admin.name.charAt(0)}
-              </div>
-            )}
+    <div className="px-8 pt-6 pb-12 bg-gray-50 min-h-full">
+      <div className="bg-white rounded-2xl border border-gray-200">
+        {/* ===== HEADER ===== */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-center gap-4">
+            <img
+              src={admin.img}
+              alt={admin.name}
+              className="w-16 h-16 rounded-full object-cover border"
+            />
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-gray-900">
                 {admin.name}
               </h2>
-              <p className="text-sm text-gray-500">{admin.role}</p>
+
+              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
+                {admin.role}
+              </span>
+
+              <p className="text-xs text-gray-400 mt-1">ID: #{admin.id}</p>
             </div>
           </div>
 
-          {/* ACTION */}
           {!editing ? (
             <button
               onClick={() => setEditing(true)}
               className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             >
-              <FiEdit />
+              <FiEdit size={14} />
               Chỉnh sửa
             </button>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2">
               <button
                 onClick={handleCancel}
-                className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50"
+                className="flex items-center gap-2 px-3 py-2 text-sm border rounded-lg hover:bg-gray-50"
               >
-                <FiX />
+                <FiX size={14} />
                 Huỷ
               </button>
               <button
                 onClick={handleSave}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                className="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
               >
-                Lưu thay đổi
+                Lưu
               </button>
             </div>
           )}
         </div>
 
-        {/* ===== FORM ===== */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* NAME */}
-          <div>
-            <label className="text-sm text-gray-500 flex items-center gap-2 mb-1">
-              <FiUser /> Họ tên
-            </label>
-            <input
+        {/* ===== BODY ===== */}
+        <div className="p-6 space-y-8">
+          <Section title="Thông tin cá nhân">
+            <ProfileField
+              icon={<FiUser size={14} />}
+              label="Họ và tên"
+              value={admin.name}
+              editing={editing}
               name="name"
-              disabled={!editing}
-              value={draft.name}
+              draftValue={draft.name}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg text-sm ${
-                editing ? "focus:ring-2 focus:ring-blue-500" : "bg-gray-100"
-              }`}
             />
-          </div>
 
-          {/* EMAIL */}
-          <div>
-            <label className="text-sm text-gray-500 flex items-center gap-2 mb-1">
-              <FiMail /> Email
-            </label>
-            <input
+            <ProfileField
+              icon={<FiMail size={14} />}
+              label="Email"
+              value={admin.email}
+              editing={editing}
               name="email"
-              disabled={!editing}
-              value={draft.email}
+              draftValue={draft.email}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg text-sm ${
-                editing ? "focus:ring-2 focus:ring-blue-500" : "bg-gray-100"
-              }`}
             />
-          </div>
+          </Section>
 
-          {/* PHONE */}
-          <div>
-            <label className="text-sm text-gray-500 flex items-center gap-2 mb-1">
-              <FiPhone /> Số điện thoại
-            </label>
-            <input
+          <Section title="Thông tin liên hệ">
+            <ProfileField
+              icon={<FiPhone size={14} />}
+              label="Số điện thoại"
+              value={admin.phone}
+              editing={editing}
               name="phone"
-              disabled={!editing}
-              value={draft.phone}
+              draftValue={draft.phone}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg text-sm ${
-                editing ? "focus:ring-2 focus:ring-blue-500" : "bg-gray-100"
-              }`}
             />
-          </div>
 
-          {/* ROLE */}
-          <div>
-            <label className="text-sm text-gray-500 flex items-center gap-2 mb-1">
-              <FiShield /> Vai trò
-            </label>
-            <input
-              disabled
-              value={admin.role}
-              className="w-full px-4 py-2 border rounded-lg text-sm bg-gray-100"
-            />
-          </div>
-
-          {/* ADDRESS */}
-          <div className="md:col-span-2">
-            <label className="text-sm text-gray-500 flex items-center gap-2 mb-1">
-              <FiMapPin /> Địa chỉ
-            </label>
-            <textarea
+            <ProfileField
+              icon={<FiMapPin size={14} />}
+              label="Địa chỉ"
+              value={admin.address}
+              editing={editing}
               name="address"
-              disabled={!editing}
-              value={draft.address}
+              draftValue={draft.address}
               onChange={handleChange}
-              rows={3}
-              className={`w-full px-4 py-2 border rounded-lg text-sm resize-none ${
-                editing ? "focus:ring-2 focus:ring-blue-500" : "bg-gray-100"
-              }`}
+              textarea
             />
-          </div>
+          </Section>
+
+          <Section title="Liên kết">
+            <ProfileDisplay icon={<FiGithub size={14} />} label="GitHub">
+              github.com/admin-demo
+            </ProfileDisplay>
+
+            <ProfileDisplay icon={<FiFacebook size={14} />} label="Facebook">
+              facebook.com/admin-demo
+            </ProfileDisplay>
+
+            <ProfileDisplay icon={<FiGlobe size={14} />} label="Website">
+              www.admin-demo.com
+            </ProfileDisplay>
+          </Section>
+
+          <Section title="Hệ thống">
+            <ProfileDisplay icon={<FiShield size={14} />} label="Vai trò">
+              {admin.role}
+            </ProfileDisplay>
+
+            <ProfileDisplay label="Role (EN)">{admin.role_EN}</ProfileDisplay>
+          </Section>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================= */
+
+function Section({ title, children }) {
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-gray-800 mb-4 uppercase tracking-wide">
+        {title}
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
+    </div>
+  );
+}
+
+function ProfileField({
+  icon,
+  label,
+  value,
+  editing,
+  name,
+  draftValue,
+  onChange,
+  textarea,
+}) {
+  if (!editing) {
+    return (
+      <ProfileDisplay icon={icon} label={label}>
+        {value}
+      </ProfileDisplay>
+    );
+  }
+
+  return (
+    <div>
+      <label className="text-xs text-gray-500 flex items-center gap-2 mb-1">
+        {icon} {label}
+      </label>
+
+      {textarea ? (
+        <textarea
+          name={name}
+          value={draftValue}
+          onChange={onChange}
+          rows={3}
+          className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 resize-none"
+        />
+      ) : (
+        <input
+          name={name}
+          value={draftValue}
+          onChange={onChange}
+          className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+        />
+      )}
+    </div>
+  );
+}
+
+function ProfileDisplay({ icon, label, children }) {
+  return (
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+      <div className="text-xs text-gray-500 flex items-center gap-2 mb-1">
+        {icon}
+        {label}
+      </div>
+      <div className="text-sm font-medium text-gray-900 break-words">
+        {children}
       </div>
     </div>
   );

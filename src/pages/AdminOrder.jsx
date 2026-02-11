@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiSearch, FiEye, FiShoppingBag } from "react-icons/fi";
 import { ordersMock } from "../data/adminMock";
-import AdminTopHeader from "../components/AdminTopHeader";
 
-/* ===== STATUS UI MAP (FRONTEND TỰ MAP) ===== */
 const statusMap = {
   completed: {
     label: "Hoàn thành",
@@ -22,38 +21,27 @@ const statusMap = {
 function AdminOrders() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
-  const [orders] = useState(ordersMock);
+  const navigate = useNavigate();
 
-  /* ===== FILTER ===== */
   const filteredOrders = useMemo(() => {
-    return orders.filter((o) => {
+    return ordersMock.filter((o) => {
       const matchText =
         o.code.toLowerCase().includes(search.toLowerCase()) ||
         o.customer.toLowerCase().includes(search.toLowerCase());
 
-      const matchStatus =
-        status === "all" || o.status === status;
+      const matchStatus = status === "all" || o.status === status;
 
       return matchText && matchStatus;
     });
-  }, [orders, search, status]);
+  }, [search, status]);
 
   return (
-    <div className="ml-64 px-8 pt-6 pb-12 bg-gray-50 min-h-screen">
-      {/* ===== HEADER ===== */}
-      <AdminTopHeader
-        title="Đơn hàng"
-        subtitle="Quản lý và theo dõi đơn hàng của khách"
-        breadcrumb={["Dashboard", "Đơn hàng"]}
-      />
-
-      {/* ===== CARD ===== */}
-      <div className="mt-8 bg-white rounded-2xl border border-gray-200 p-6">
-        {/* ===== TOOLBAR ===== */}
+    <div className="w-full px-6 lg:px-8 pt-6 pb-12 bg-gray-50 min-h-screen">
+      <div className="bg-white rounded-2xl border border-gray-200 p-6">
+        {/* TOOLBAR */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-3">
-            {/* SEARCH */}
-            <div className="relative w-72">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative w-72 max-w-full">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
@@ -64,7 +52,6 @@ function AdminOrders() {
               />
             </div>
 
-            {/* STATUS FILTER */}
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
@@ -78,9 +65,9 @@ function AdminOrders() {
           </div>
         </div>
 
-        {/* ===== TABLE ===== */}
-        <div className="overflow-hidden rounded-xl border border-gray-200">
-          <table className="w-full text-sm">
+        {/* TABLE */}
+        <div className="overflow-x-auto rounded-xl border border-gray-200">
+          <table className="w-full text-sm min-w-[900px]">
             <thead className="bg-gray-50 text-gray-600">
               <tr>
                 <th className="text-left px-6 py-3">Mã đơn</th>
@@ -94,13 +81,7 @@ function AdminOrders() {
 
             <tbody>
               {filteredOrders.map((order) => {
-                const statusUI =
-                  statusMap[order.status] ||
-                  {
-                    label: order.status,
-                    className:
-                      "bg-gray-50 text-gray-700 border-gray-200",
-                  };
+                const statusUI = statusMap[order.status];
 
                 return (
                   <tr
@@ -108,11 +89,23 @@ function AdminOrders() {
                     className="border-t hover:bg-gray-50 transition"
                   >
                     <td className="px-6 py-4 font-medium text-gray-800">
-                      #{order.code}
+                      {order.code}
                     </td>
 
-                    <td className="px-6 py-4 text-gray-600">
-                      {order.customer}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={order.avatar}
+                          alt=""
+                          className="w-9 h-9 rounded-full object-cover"
+                        />
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            {order.customer}
+                          </p>
+                          <p className="text-xs text-gray-500">{order.email}</p>
+                        </div>
+                      </div>
                     </td>
 
                     <td className="px-6 py-4 text-right font-semibold">
@@ -131,10 +124,14 @@ function AdminOrders() {
                       {order.createdAt}
                     </td>
 
-                    {/* ACTION */}
                     <td className="px-6 py-4">
                       <div className="flex justify-end">
-                        <button className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition">
+                        <button
+                          onClick={() =>
+                            navigate(`/dashboard/orders/${order.id}`)
+                          }
+                          className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition"
+                        >
                           <FiEye />
                         </button>
                       </div>
