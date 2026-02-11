@@ -1,144 +1,104 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  FiGrid,
-  FiChevronDown,
-  FiBox,
-  FiShoppingCart,
-  FiUser,
-} from "react-icons/fi";
+import { NavLink } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FiGrid, FiBox, FiShoppingCart, FiUser } from "react-icons/fi";
 
 const navItem =
-  "relative flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition";
+  "relative flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors duration-200";
 
-function AdminSidebar() {
-  const [openStore, setOpenStore] = useState(true);
-  const location = useLocation();
-
-  // tự mở submenu nếu đang ở route con
-  useEffect(() => {
-    if (location.pathname.includes("/dashboard/products") ||
-        location.pathname.includes("/dashboard/orders")) {
-      setOpenStore(true);
-    }
-  }, [location.pathname]);
-
-  return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-gray-50 border-r border-gray-200 px-5 py-6">
-      {/* LOGO */}
-      <h1 className="text-xl font-semibold tracking-tight text-gray-900">
-        Falcon Eyewear
-      </h1>
-
-      {/* Divider */}
-      <div className="my-5 h-px bg-gray-200" />
-
-      {/* MENU */}
-      <p className="text-xs text-gray-400 uppercase tracking-wider mb-3">
-        Menu
-      </p>
-
-      {/* Tổng quan */}
-      <NavLink to="/dashboard" end className={({ isActive }) =>
-        `${navItem} ${isActive ? "text-blue-600 font-medium" : "text-gray-700 hover:bg-gray-100"}`
-      }>
-        {({ isActive }) => (
-          <>
-            {isActive && (
-              <motion.span
-                layoutId="active-pill"
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-blue-600"
-              />
-            )}
-            <FiGrid size={18} />
-            Tổng quan
-          </>
-        )}
-      </NavLink>
-
-      {/* Quản lý cửa hàng */}
-      <div className="mt-1">
-        <button
-          onClick={() => setOpenStore(!openStore)}
-          className="relative flex w-full items-center justify-between px-4 py-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition"
-        >
-          <div className="flex items-center gap-3">
-            <FiBox size={18} />
-            <span className="text-sm font-medium">Quản lý cửa hàng</span>
-          </div>
-
-          <motion.span
-            animate={{ rotate: openStore ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <FiChevronDown />
-          </motion.span>
-
-          {(location.pathname.includes("/products") ||
-            location.pathname.includes("/orders")) && (
+function AdminSidebar({ collapsed }) {
+  const renderItem = (to, icon, label, end = false) => (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) =>
+        `${navItem} ${collapsed ? "justify-center px-0" : ""} ${
+          isActive
+            ? "text-blue-600 font-medium"
+            : "text-gray-700 hover:bg-gray-100"
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          {/* Active Indicator */}
+          {isActive && (
             <motion.span
               layoutId="active-pill"
               className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-blue-600"
             />
           )}
-        </button>
 
-        <AnimatePresence>
-          {openStore && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="ml-6 mt-1 space-y-1 overflow-hidden"
-            >
-              <NavLink to="/dashboard/products" className={({ isActive }) =>
-                `${navItem} pl-6 ${
-                  isActive
-                    ? "bg-blue-50 text-blue-600 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`
-              }>
-                <FiBox size={16} />
-                Sản phẩm
-              </NavLink>
+          {/* Icon box cố định để không nhảy */}
+          <div className="w-6 flex justify-center items-center">{icon}</div>
 
-              <NavLink to="/dashboard/orders" className={({ isActive }) =>
-                `${navItem} pl-6 ${
-                  isActive
-                    ? "bg-blue-50 text-blue-600 font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`
-              }>
-                <FiShoppingCart size={16} />
-                Đơn hàng
-              </NavLink>
-            </motion.div>
+          {/* Label */}
+          {!collapsed && <span>{label}</span>}
+
+          {/* Tooltip khi collapsed */}
+          {collapsed && (
+            <div className="absolute left-16 whitespace-nowrap rounded-md bg-gray-900 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition">
+              {label}
+            </div>
           )}
-        </AnimatePresence>
+        </>
+      )}
+    </NavLink>
+  );
+
+  return (
+    <motion.aside
+      animate={{ width: collapsed ? 80 : 256 }}
+      transition={{ duration: 0.25 }}
+      className="h-screen bg-white border-r border-gray-200 flex flex-col"
+    >
+      {/* ===== BRAND ===== */}
+      <div className="h-20 flex items-center justify-center border-b border-gray-100">
+        {collapsed ? (
+          // Logo khi thu nhỏ
+          <motion.img
+            key="logo"
+            src="https://tse1.mm.bing.net/th/id/OIP.VNNzIRDW9nZsWGt1vmCCXwHaFL?rs=1&pid=ImgDetMain&o=7&rm=3" // 👈 đổi path logo của bạn
+            alt="Falcon"
+            className="w-8 h-8 object-contain"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          />
+        ) : (
+          // Text khi mở rộng
+          <motion.h1
+            key="text"
+            className="text-lg font-semibold text-gray-900 tracking-tight"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            Falcon Eyewear
+          </motion.h1>
+        )}
       </div>
 
-      {/* Hồ sơ */}
-      <NavLink to="/dashboard/profile" className={({ isActive }) =>
-        `${navItem} mt-2 ${
-          isActive ? "text-blue-600 font-medium" : "text-gray-700 hover:bg-gray-100"
-        }`
-      }>
-        {({ isActive }) => (
-          <>
-            {isActive && (
-              <motion.span
-                layoutId="active-pill"
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-blue-600"
-              />
-            )}
-            <FiUser size={18} />
-            Hồ sơ
-          </>
-        )}
-      </NavLink>
-    </aside>
+      {/* ===== MENU ===== */}
+      <div className="flex-1 pt-6 px-3 space-y-2">
+        <div className="group relative">
+          {renderItem("/dashboard", <FiGrid size={18} />, "Tổng quan", true)}
+        </div>
+
+        <div className="group relative">
+          {renderItem("/dashboard/products", <FiBox size={18} />, "Sản phẩm")}
+        </div>
+
+        <div className="group relative">
+          {renderItem(
+            "/dashboard/orders",
+            <FiShoppingCart size={18} />,
+            "Đơn hàng",
+          )}
+        </div>
+
+        <div className="group relative">
+          {renderItem("/dashboard/profile", <FiUser size={18} />, "Hồ sơ")}
+        </div>
+      </div>
+    </motion.aside>
   );
 }
 
