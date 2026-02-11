@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
 import { productsMock } from "../data/adminMock";
 import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiPackage } from "react-icons/fi";
+import AddProductModal from "../modal/AddProductModal";
 
 function AdminProducts() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
-  const [products] = useState(productsMock);
+  const [products, setProducts] = useState(productsMock);
+  const [showModal, setShowModal] = useState(false);
 
   /* =========================
      CATEGORY LIST
@@ -23,6 +25,13 @@ function AdminProducts() {
     const matchCategory = category === "all" || p.category === category;
     return matchName && matchCategory;
   });
+
+  /* =========================
+     ADD PRODUCT
+  ========================= */
+  const handleAddProduct = (product) => {
+    setProducts((prev) => [...prev, product]);
+  };
 
   /* =========================
      STOCK UI
@@ -99,7 +108,10 @@ function AdminProducts() {
           </div>
 
           {/* ADD BUTTON */}
-          <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm"
+          >
             <FiPlus />
             Thêm sản phẩm
           </button>
@@ -175,7 +187,9 @@ function AdminProducts() {
                   <td colSpan={5} className="py-16 text-center">
                     <div className="flex flex-col items-center gap-3 text-gray-400">
                       <FiPackage className="text-4xl" />
-                      <p className="text-sm">Không tìm thấy sản phẩm phù hợp</p>
+                      <p className="text-sm">
+                        Không tìm thấy sản phẩm phù hợp
+                      </p>
                     </div>
                   </td>
                 </tr>
@@ -189,6 +203,16 @@ function AdminProducts() {
           Hiển thị {filteredProducts.length} / {products.length} sản phẩm
         </div>
       </div>
+
+      {/* =========================
+         MODAL
+      ========================= */}
+      {showModal && (
+        <AddProductModal
+          onClose={() => setShowModal(false)}
+          onAdd={handleAddProduct}
+        />
+      )}
     </div>
   );
 }
