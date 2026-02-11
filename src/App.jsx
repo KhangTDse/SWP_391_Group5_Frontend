@@ -1,23 +1,23 @@
 import { Routes, Route } from "react-router-dom";
-import ScrollToTop from "./components/common/ScrollToTop";
-import HomePage from "./pages/HomePage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx"; // <--- 1. Import trang mới
-import ProductDetailPage from "./pages/ProductDetailPage.jsx";
-import ShopPage from "./pages/ShopPage.jsx";
-import AdminOverview from "./pages/AdminOverview";
-import StoreLayout from "./layout/StoreLayout";
-import AdminLayout from "./layout/AdminLayout";
-import AdminProducts from "./pages/AdminProducts.jsx";
-import AdminOrders from "./pages/AdminOrder.jsx";
-import FrameSelectionPage from "./pages/FrameSelectionPage";
-import PrescriptionPage from "./pages/PrescriptionPage";
-import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage";
-import PaymentPage from "./pages/PaymentPage";
-import OrderSuccessPage from "./pages/OrderSuccessPage";
+import ScrollToTop from "./shared/common/ScrollToTop.jsx";
+import HomePage from "./store/pages/HomePage.jsx";
+import LoginPage from "./store/pages/LoginPage.jsx";
+import RegisterPage from "./store/pages/RegisterPage.jsx"; // <--- 1. Import trang mới
+import ProductDetailPage from "./store/pages/ProductDetailPage.jsx";
+import ShopPage from "./store/pages/ShopPage.jsx";
+import AdminOverview from "./admin/pages/AdminOverview.jsx";
+import StoreLayout from "./store/layout/StoreLayout";
+import AdminLayout from "./admin/layout/AdminLayout";
+import AdminProducts from "./admin/pages/AdminProducts.jsx";
+import AdminOrders from "./admin/pages/AdminOrder.jsx";
+import FrameSelectionPage from "./store/pages/FrameSelectionPage";
+import PrescriptionPage from "./store/pages/PrescriptionPage";
+import CartPage from "./store/pages/CartPage";
+import CheckoutPage from "./store/pages/CheckoutPage";
+import PaymentPage from "./store/pages/PaymentPage";
+import OrderSuccessPage from "./store/pages/OrderSuccessPage";
+import AdminProfile from "./admin/pages/AdminProfile.jsx";
 
-import AdminProfile from "./pages/AdminProfile.jsx";
 function App() {
   return (
     <div>

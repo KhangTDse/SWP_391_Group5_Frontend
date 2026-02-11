@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom"; // Thêm useLocation
-import {adminMock} from "../data/adminMock";
+import { adminMock} from "../data/loginMock";
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
