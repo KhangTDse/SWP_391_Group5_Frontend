@@ -14,6 +14,10 @@ import { motion, AnimatePresence } from "framer-motion";
 function AdminProducts() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const [priceFilter, setPriceFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("default");
+  // default | asc | desc
+
   const [products, setProducts] = useState(productsMock);
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState([]);
@@ -30,29 +34,54 @@ function AdminProducts() {
   }, [products]);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
+    let result = products.filter((p) => {
       const matchName = p.name.toLowerCase().includes(search.toLowerCase());
       const matchCategory = category === "all" || p.category === category;
-      return matchName && matchCategory;
+
+      let matchPrice = true;
+
+      switch (priceFilter) {
+        case "under500":
+          matchPrice = p.price < 500000;
+          break;
+        case "500to1m":
+          matchPrice = p.price >= 500000 && p.price <= 1000000;
+          break;
+        case "1mto2m":
+          matchPrice = p.price > 1000000 && p.price <= 2000000;
+          break;
+        case "over2m":
+          matchPrice = p.price > 2000000;
+          break;
+        default:
+          matchPrice = true;
+      }
+
+      return matchName && matchCategory && matchPrice;
     });
-  }, [products, search, category]);
+
+    // ===== SORT =====
+    if (sortOrder === "asc") {
+      result = [...result].sort((a, b) => a.price - b.price);
+    }
+
+    if (sortOrder === "desc") {
+      result = [...result].sort((a, b) => b.price - a.price);
+    }
+
+    return result;
+  }, [products, search, category, priceFilter, sortOrder]);
 
   /* ================= PAGINATION LOGIC ================= */
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const safeCurrentPage =
-  totalPages === 0
-    ? 1
-    : currentPage > totalPages
-    ? totalPages
-    : currentPage;
-
+    totalPages === 0 ? 1 : currentPage > totalPages ? totalPages : currentPage;
 
   const paginatedProducts = filteredProducts.slice(
-  (safeCurrentPage - 1) * itemsPerPage,
-  safeCurrentPage * itemsPerPage,
-);
-
+    (safeCurrentPage - 1) * itemsPerPage,
+    safeCurrentPage * itemsPerPage,
+  );
 
   /* Fix page overflow khi xóa */
   // useEffect(() => {
@@ -188,6 +217,21 @@ function AdminProducts() {
                 </option>
               ))}
             </select>
+
+            <select
+              value={priceFilter}
+              onChange={(e) => {
+                setPriceFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="all">Tất cả mức giá</option>
+              <option value="under500">Dưới 500k</option>
+              <option value="500to1m">500k - 1 triệu</option>
+              <option value="1mto2m">1 - 2 triệu</option>
+              <option value="over2m">Trên 2 triệu</option>
+            </select>
           </div>
 
           <div className="flex gap-3">
@@ -229,7 +273,25 @@ function AdminProducts() {
                   </th>
                   <th className="w-[30%] text-left px-6 py-3">Sản phẩm</th>
                   <th className="w-[20%] text-left px-6 py-3">Danh mục</th>
-                  <th className="w-[15%] text-right px-6 py-3">Giá</th>
+                  <th className="w-[15%] text-right px-6 py-3">
+                    <span
+                      onClick={() =>
+                        setSortOrder((prev) =>
+                          prev === "asc"
+                            ? "desc"
+                            : prev === "desc"
+                              ? "default"
+                              : "asc",
+                        )
+                      }
+                      className="cursor-pointer select-none text-sm font-medium text-gray-700 hover:text-black transition-colors normal-case"
+                    >
+                      {sortOrder === "default" && "Giá"}
+                      {sortOrder === "asc" && "Giá ↑"}
+                      {sortOrder === "desc" && "Giá ↓"}
+                    </span>
+                  </th>
+
                   <th className="w-[15%] text-center px-6 py-3">Tồn kho</th>
                   <th className="w-[15%] text-right px-6 py-3">Hành động</th>
                 </tr>

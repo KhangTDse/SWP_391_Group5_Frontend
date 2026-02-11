@@ -2,30 +2,6 @@
    ADMIN DASHBOARD MOCK DATA
    ============================ */
 
-/* ===== THỐNG KÊ TỔNG QUAN ===== */
-export const dashboardStats = [
-  {
-    id: 1,
-    title: "Tổng sản phẩm",
-    value: 128,
-  },
-  {
-    id: 2,
-    title: "Đơn hàng hôm nay",
-    value: 32,
-  },
-  {
-    id: 3,
-    title: "Khách hàng",
-    value: 540,
-  },
-  {
-    id: 4,
-    title: "Doanh thu",
-    value: "12.400.000 ₫",
-  },
-];
-
 /* ===== DANH SÁCH SẢN PHẨM ===== */
 export const productsMock = [
   {
@@ -140,8 +116,11 @@ export const ordersMock = [
     email: "nguyenvanan@gmail.com",
     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     status: "completed",
-    total: 1200000,
     createdAt: "02/02/2026",
+    items: [
+      { productId: 2, quantity: 1 }, // Tròng 1.200.000
+    ],
+    total: 1200000,
   },
   {
     id: 2,
@@ -150,8 +129,12 @@ export const ordersMock = [
     email: "tranbinh@gmail.com",
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     status: "pending",
-    total: 850000,
     createdAt: "03/02/2026",
+    items: [
+      { productId: 3, quantity: 1 }, // 750.000
+      { productId: 12, quantity: 1 }, // 550.000
+    ],
+    total: 1300000,
   },
   {
     id: 3,
@@ -160,8 +143,11 @@ export const ordersMock = [
     email: "cuongle@gmail.com",
     avatar: "https://randomuser.me/api/portraits/men/65.jpg",
     status: "cancelled",
-    total: 2150000,
     createdAt: "04/02/2026",
+    items: [
+      { productId: 10, quantity: 1 }, // 2.100.000
+    ],
+    total: 2100000,
   },
   {
     id: 4,
@@ -170,8 +156,11 @@ export const ordersMock = [
     email: "thuhapham@gmail.com",
     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     status: "completed",
-    total: 980000,
     createdAt: "05/02/2026",
+    items: [
+      { productId: 7, quantity: 1 }, // 890.000
+    ],
+    total: 890000,
   },
   {
     id: 5,
@@ -180,8 +169,11 @@ export const ordersMock = [
     email: "namvo@gmail.com",
     avatar: "https://randomuser.me/api/portraits/men/71.jpg",
     status: "pending",
-    total: 1560000,
     createdAt: "06/02/2026",
+    items: [
+      { productId: 6, quantity: 1 }, // 1.650.000
+    ],
+    total: 1650000,
   },
   {
     id: 6,
@@ -190,8 +182,11 @@ export const ordersMock = [
     email: "linhngo@gmail.com",
     avatar: "https://randomuser.me/api/portraits/women/22.jpg",
     status: "completed",
-    total: 1890000,
     createdAt: "07/02/2026",
+    items: [
+      { productId: 9, quantity: 1 }, // 1.750.000
+    ],
+    total: 1750000,
   },
   {
     id: 7,
@@ -200,8 +195,11 @@ export const ordersMock = [
     email: "bao.dang@gmail.com",
     avatar: "https://randomuser.me/api/portraits/men/11.jpg",
     status: "cancelled",
-    total: 640000,
     createdAt: "08/02/2026",
+    items: [
+      { productId: 12, quantity: 1 }, // 550.000
+    ],
+    total: 550000,
   },
   {
     id: 8,
@@ -210,27 +208,45 @@ export const ordersMock = [
     email: "hanhtrinh@gmail.com",
     avatar: "https://randomuser.me/api/portraits/women/19.jpg",
     status: "completed",
-    total: 2450000,
     createdAt: "09/02/2026",
+    items: [
+      { productId: 4, quantity: 1 }, // 1.350.000
+      { productId: 2, quantity: 1 }, // 1.200.000
+    ],
+    total: 2550000,
   },
 ];
 
-/* ===== OVERVIEW CHART ===== */
-export const revenueData = [
-  { day: "Thứ 2", revenue: 1200 },
-  { day: "Thứ 3", revenue: 2100 },
-  { day: "Thứ 4", revenue: 1800 },
-  { day: "Thứ 5", revenue: 2600 },
-  { day: "Thứ 6", revenue: 3200 },
-  { day: "Thứ 7", revenue: 2800 },
-  { day: "Chủ nhật", revenue: 3500 },
+
+/* ===== THỐNG KÊ TỔNG QUAN ===== */
+export const dashboardStats = [
+  {
+    id: 1,
+    title: "Tổng sản phẩm",
+    value: productsMock.length,
+  },
+  {
+    id: 2,
+    title: "Đơn hàng hôm nay",
+    value: ordersMock.filter((o) => o.createdAt === "09/02/2026").length,
+  },
+  {
+    id: 3,
+    title: "Khách hàng",
+    value: 540,
+  },
+  {
+    id: 4,
+    title: "Doanh thu",
+    value:
+      ordersMock
+        .filter((o) => o.status === "completed")
+        .reduce((sum, o) => sum + o.total, 0)
+        .toLocaleString("vi-VN") + " ₫",
+  },
 ];
 
-export const orderStatusData = [
-  { name: "Hoàn thành", value: 68 },
-  { name: "Chờ xử lý", value: 32 },
-  { name: "Đang giao", value: 20 },
-];
+
 
 /* ===== OVERVIEW STATS (STAT CARD) ===== */
 export const overviewStats = [
@@ -265,44 +281,80 @@ export const overviewStats = [
 ];
 
 /* ===== RECENT ORDERS (TABLE) ===== */
-export const recentOrders = [
+// export const recentOrders = [
+//   {
+//     id: "#001",
+//     customer: "Nguyễn Văn An",
+//     email: "nguyenvanan@gmail.com",
+//     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+//     status: "completed",
+//     total: "1.200.000 ₫",
+//     createdAt: "02/02/2026",
+//   },
+//   {
+//     id: "#002",
+//     customer: "Trần Thị Bình",
+//     email: "tranbinh@gmail.com",
+//     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+//     status: "pending",
+//     total: "850.000 ₫",
+//     createdAt: "03/02/2026",
+//   },
+//   {
+//     id: "#003",
+//     customer: "Lê Minh Cường",
+//     email: "cuongle@gmail.com",
+//     avatar: "https://randomuser.me/api/portraits/men/65.jpg",
+//     status: "cancelled",
+//     total: "2.150.000 ₫",
+//     createdAt: "04/02/2026",
+//   },
+//   {
+//     id: "#004",
+//     customer: "Phạm Thu Hà",
+//     email: "thuhapham@gmail.com",
+//     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+//     status: "completed",
+//     total: "980.000 ₫",
+//     createdAt: "05/02/2026",
+//   },
+// ];
+export const recentOrders = ordersMock.slice(0, 4).map((order) => ({
+  id: order.code,
+  customer: order.customer,
+  email: order.email,
+  avatar: order.avatar,
+  status: order.status,
+  total: order.total.toLocaleString("vi-VN") + " ₫",
+  createdAt: order.createdAt,
+}));
+
+export const orderStatusData = [
   {
-    id: "#001",
-    customer: "Nguyễn Văn An",
-    email: "nguyenvanan@gmail.com",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    status: "completed",
-    total: "1.200.000 ₫",
-    createdAt: "02/02/2026",
+    name: "Hoàn thành",
+    value: ordersMock.filter((o) => o.status === "completed").length,
   },
   {
-    id: "#002",
-    customer: "Trần Thị Bình",
-    email: "tranbinh@gmail.com",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    status: "pending",
-    total: "850.000 ₫",
-    createdAt: "03/02/2026",
+    name: "Chờ xử lý",
+    value: ordersMock.filter((o) => o.status === "pending").length,
   },
   {
-    id: "#003",
-    customer: "Lê Minh Cường",
-    email: "cuongle@gmail.com",
-    avatar: "https://randomuser.me/api/portraits/men/65.jpg",
-    status: "cancelled",
-    total: "2.150.000 ₫",
-    createdAt: "04/02/2026",
-  },
-  {
-    id: "#004",
-    customer: "Phạm Thu Hà",
-    email: "thuhapham@gmail.com",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    status: "completed",
-    total: "980.000 ₫",
-    createdAt: "05/02/2026",
+    name: "Đã huỷ",
+    value: ordersMock.filter((o) => o.status === "cancelled").length,
   },
 ];
+
+/* ===== OVERVIEW CHART ===== */
+export const revenueData = [
+  { day: "Thứ 2", revenue: 1200000 },
+  { day: "Thứ 3", revenue: 2100000 },
+  { day: "Thứ 4", revenue: 1800000 },
+  { day: "Thứ 5", revenue: 2600000 },
+  { day: "Thứ 6", revenue: 3200000 },
+  { day: "Thứ 7", revenue: 2800000 },
+  { day: "Chủ nhật", revenue: 3500000 },
+];
+
 
 /* ===== ADMIN PROFILE ===== */
 export const adminMock = {
