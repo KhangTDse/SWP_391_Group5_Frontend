@@ -54,9 +54,17 @@ function AddProductModal({ onClose, onAdd }) {
   const handleSubmit = () => {
     if (!form.name || !form.type || !form.price) return;
 
+    const categoryMap = {
+      kinhmat: "Kính mát",
+      gongkinh: "Gọng kính",
+      trongkinh: "Tròng kính",
+    };
+
     onAdd({
       id: Date.now(),
       ...form,
+      category: categoryMap[form.type], // 👈 thêm dòng này
+      img: form.image, // 👈 nếu table dùng img
       price: Number(form.price),
       salePrice: form.salePrice ? Number(form.salePrice) : null,
       stock: Number(form.stock),
