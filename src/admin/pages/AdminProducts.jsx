@@ -9,6 +9,7 @@ import {
   FiCheck,
 } from "react-icons/fi";
 import AddProductModal from "../modal/AddProductModal";
+import EditProductModal from "../modal/EditProductModal";
 import { motion, AnimatePresence } from "framer-motion";
 
 function AdminProducts() {
@@ -22,6 +23,7 @@ function AdminProducts() {
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState([]);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
 
   /* ================= PAGINATION ================= */
   const [currentPage, setCurrentPage] = useState(1);
@@ -124,6 +126,12 @@ function AdminProducts() {
     setProducts((prev) => [...prev, product]);
   };
 
+  const handleUpdateProduct = (updatedProduct) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === updatedProduct.id ? updatedProduct : p)),
+    );
+  };
+
   /* ================= STOCK UI ================= */
   const renderStock = (stock) => {
     if (stock === 0)
@@ -177,7 +185,7 @@ function AdminProducts() {
   const isFilteredEmpty = filteredProducts.length === 0;
 
   return (
-    <div className="px-8 pt-6 pb-12 bg-gray-50 min-h-full">
+    <div className="px-8 pt-6 pb-12 bg-gray-50 min-h-full overflow-x-hidden">
       <div className="mb-6">
         <h1 className="text-xl font-bold text-gray-800">Quản lý sản phẩm</h1>
         <p className="text-sm text-gray-500">
@@ -255,7 +263,7 @@ function AdminProducts() {
         </div>
 
         {/* TABLE giữ nguyên UI của bạn */}
-        <div className="rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="rounded-2xl border border-gray-200 overflow-visible">
           <div className="overflow-x-auto">
             <table className="w-full table-fixed text-sm">
               <thead className="bg-gray-50">
@@ -353,16 +361,46 @@ function AdminProducts() {
 
                       <td className="px-6 py-4">
                         <div className="flex justify-end gap-3">
-                          <button className="p-2 rounded-lg text-blue-700 hover:bg-blue-200 hover:text-blue-900 transition">
-                            <FiEdit2 />
-                          </button>
+                          <div className="relative group">
+                            <button
+                              onClick={() => setEditingProduct(product)}
+                              className="p-2 rounded-lg text-blue-700 hover:bg-blue-200 hover:text-blue-900 transition"
+                            >
+                              <FiEdit2 />
+                            </button>
 
-                          <button
-                            onClick={() => setConfirmDelete(product.id)}
-                            className="p-2 rounded-lg text-red-700 hover:bg-red-200 hover:text-red-900 transition"
-                          >
-                            <FiTrash2 />
-                          </button>
+                            <div
+                              className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2
+               px-3 py-1 text-xs rounded-md
+               bg-gray-900 text-white
+               opacity-0 group-hover:opacity-100
+               pointer-events-none
+               transition-all duration-200
+               whitespace-nowrap z-50"
+                            >
+                              Chỉnh sửa
+                            </div>
+                          </div>
+                          <div className="relative group">
+                            <button
+                              onClick={() => setConfirmDelete(product.id)}
+                              className="p-2 rounded-lg text-red-700 hover:bg-red-200 hover:text-red-900 transition"
+                            >
+                              <FiTrash2 />
+                            </button>
+
+                            <div
+                              className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2
+               px-3 py-1 text-xs rounded-md
+               bg-gray-900 text-white
+               opacity-0 group-hover:opacity-100
+               pointer-events-none
+               transition-all duration-200
+               whitespace-nowrap z-50"
+                            >
+                              Xoá
+                            </div>
+                          </div>
                         </div>
                       </td>
                     </tr>
@@ -471,6 +509,14 @@ function AdminProducts() {
         <AddProductModal
           onClose={() => setShowModal(false)}
           onAdd={handleAddProduct}
+        />
+      )}
+
+      {editingProduct && (
+        <EditProductModal
+          product={editingProduct}
+          onClose={() => setEditingProduct(null)}
+          onUpdate={handleUpdateProduct}
         />
       )}
     </div>
