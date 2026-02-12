@@ -14,23 +14,24 @@ function AdminLayout() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <AdminSidebar collapsed={collapsed} />
+      <div className="flex h-screen bg-gray-100">
+        {/* Sidebar */}
+        <AdminSidebar collapsed={collapsed} />
 
-      {/* Right side */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <AdminTopHeader
-          onToggleSidebar={() =>
-            setCollapsed((prev) => !prev) // ✅ toggle chuẩn
-          }
-        />
+        {/* Right side */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <AdminTopHeader
+            collapsed={collapsed}
+            onToggleSidebar={
+              () => setCollapsed((prev) => !prev) // ✅ toggle chuẩn
+            }
+          />
 
-        <div className="flex-1 overflow-y-auto bg-gray-100">
-          <Outlet />
+          <div className="flex-1 overflow-y-auto bg-gray-100">
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
   );
 }
 

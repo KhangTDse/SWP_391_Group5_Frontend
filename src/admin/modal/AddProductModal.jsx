@@ -1,8 +1,62 @@
 import { useState } from "react";
-import { FiX, FiPackage, FiImage } from "react-icons/fi";
+import {
+  FiX,
+  FiPackage,
+  FiCheck,
+  FiArrowRight,
+  FiArrowLeft,
+} from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
+/* ================= STEPPER COMPONENT (ĐƯA RA NGOÀI ĐỂ FIX LỖI) ================= */
+function Stepper({ step }) {
+  const progressPercent = step === 1 ? 0 : step === 2 ? 50 : 100;
+
+  return (
+    <div className="px-8 pt-6 pb-2">
+      <div className="relative flex items-center justify-between">
+        {/* LINE WRAPPER - giới hạn đúng từ tâm circle 1 đến circle 3 */}
+        <div className="absolute top-5 left-5 right-5 h-1">
+          {/* Background Line */}
+          <div className="w-full h-1 bg-gray-200 rounded-full" />
+
+          {/* Active Line */}
+          <div
+            className="absolute top-0 left-0 h-1 bg-blue-600 rounded-full transition-all duration-500"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+
+        {[1, 2, 3].map((s) => (
+          <div key={s} className="relative z-10 flex flex-col items-center">
+            <div
+              className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300
+                ${
+                  step >= s
+                    ? "bg-blue-600 text-white shadow-md scale-105"
+                    : "bg-gray-200 text-gray-500"
+                }`}
+            >
+              {step > s ? <FiCheck /> : s}
+            </div>
+
+            <span className="text-xs mt-2 text-gray-500">
+              {s === 1 && "Danh mục"}
+              {s === 2 && "Chi tiết"}
+              {s === 3 && "Hoàn thành"}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ================= MAIN COMPONENT ================= */
 function AddProductModal({ onClose, onAdd }) {
+  const [step, setStep] = useState(1);
+  const [completed, setCompleted] = useState(false);
+
   const [form, setForm] = useState({
     type: "",
     name: "",
@@ -16,7 +70,7 @@ function AddProductModal({ onClose, onAdd }) {
     specs: {},
   });
 
-  /* ========================= HANDLE CHANGE ========================= */
+  /* ================= HANDLE CHANGE ================= */
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -50,7 +104,7 @@ function AddProductModal({ onClose, onAdd }) {
     });
   };
 
-  /* ========================= SUBMIT ========================= */
+  /* ================= SUBMIT ================= */
   const handleSubmit = () => {
     if (!form.name || !form.type || !form.price) return;
 
@@ -63,17 +117,35 @@ function AddProductModal({ onClose, onAdd }) {
     onAdd({
       id: Date.now(),
       ...form,
-      category: categoryMap[form.type], // 👈 thêm dòng này
-      img: form.image, // 👈 nếu table dùng img
+      category: categoryMap[form.type],
+      img: form.image,
       price: Number(form.price),
       salePrice: form.salePrice ? Number(form.salePrice) : null,
       stock: Number(form.stock),
     });
 
-    onClose();
+    setCompleted(true);
+    setStep(3);
   };
 
-  /* ========================= RENDER TYPE ========================= */
+  const resetForm = () => {
+    setCompleted(false);
+    setStep(1);
+    setForm({
+      type: "",
+      name: "",
+      brand: "",
+      gender: "unisex",
+      price: "",
+      salePrice: "",
+      stock: "",
+      sku: "",
+      image: "",
+      specs: {},
+    });
+  };
+
+  /* ================= RENDER TYPE FIELDS ================= */
   const renderTypeFields = () => {
     switch (form.type) {
       case "kinhmat":
@@ -96,7 +168,6 @@ function AddProductModal({ onClose, onAdd }) {
             />
           </Section>
         );
-
       case "gongkinh":
         return (
           <Section title="Thông tin gọng kính">
@@ -105,20 +176,15 @@ function AddProductModal({ onClose, onAdd }) {
               name="frameMaterial"
               onChange={handleSpecChange}
             />
-            <Input
-              label="Kích thước (VD: 52-18-140)"
-              name="size"
-              onChange={handleSpecChange}
-            />
+            <Input label="Kích thước" name="size" onChange={handleSpecChange} />
             <Input label="Màu gọng" name="color" onChange={handleSpecChange} />
           </Section>
         );
-
       case "trongkinh":
         return (
           <Section title="Thông tin tròng kính">
             <Input
-              label="Chiết suất (1.56 / 1.67 / 1.74)"
+              label="Chiết suất"
               name="lensIndex"
               onChange={handleSpecChange}
             />
@@ -130,73 +196,73 @@ function AddProductModal({ onClose, onAdd }) {
             <Input label="Chống UV" name="uv" onChange={handleSpecChange} />
           </Section>
         );
-
       default:
         return null;
     }
   };
 
   return (
-    <AnimatePresence mode="wait">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-lg flex items-center justify-center z-50 px-4">
       <motion.div
-        key="backdrop"
-        className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 px-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        onClick={onClose}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl flex flex-col max-h-[95vh]"
       >
-        <motion.div
-          key="modal"
-          initial={{ opacity: 0, scale: 0.9, y: 60 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{
-            opacity: 0,
-            scale: 0.85,
-            y: 80,
-            transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className="bg-white w-full max-w-4xl rounded-3xl shadow-[0_30px_80px_rgba(0,0,0,0.18)] relative max-h-[95vh] flex flex-col"
-        >
-          {/* HEADER */}
-          <div className="flex items-center justify-between px-8 py-5 border-b">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-blue-50">
-                <FiPackage className="text-blue-600 text-lg" />
-              </div>
-              <h2 className="font-semibold text-xl text-gray-800">
-                Thêm sản phẩm mới
-              </h2>
+        {/* HEADER */}
+        <div className="flex items-center justify-between px-8 py-5 border-b">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-blue-50">
+              <FiPackage className="text-blue-600 text-lg" />
             </div>
-
-            <button
-              onClick={onClose}
-              className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition"
-            >
-              <FiX size={20} />
-            </button>
+            <h2 className="font-semibold text-xl text-gray-800">
+              Thêm sản phẩm
+            </h2>
           </div>
 
-          {/* CONTENT */}
-          <div className="p-8 space-y-10 overflow-y-auto custom-scroll">
-            <Section title="Loại sản phẩm">
-              <Select
-                label="Chọn loại"
-                name="type"
-                value={form.type}
-                onChange={handleChange}
-                options={[
-                  { label: "Kính mát", value: "kinhmat" },
-                  { label: "Gọng kính", value: "gongkinh" },
-                  { label: "Tròng kính", value: "trongkinh" },
-                ]}
-              />
-            </Section>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100"
+          >
+            <FiX size={20} />
+          </button>
+        </div>
 
-            {form.type && (
-              <>
+        {/* Stepper luôn hiển thị */}
+        <Stepper step={step} />
+
+        {/* CONTENT */}
+        <div className="p-8 flex-1 overflow-y-auto">
+          <AnimatePresence mode="wait">
+            {step === 1 && !completed && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+              >
+                <Section title="Chọn danh mục">
+                  <Select
+                    label="Loại sản phẩm"
+                    name="type"
+                    value={form.type}
+                    onChange={handleChange}
+                    options={[
+                      { label: "Kính mát", value: "kinhmat" },
+                      { label: "Gọng kính", value: "gongkinh" },
+                      { label: "Tròng kính", value: "trongkinh" },
+                    ]}
+                  />
+                </Section>
+              </motion.div>
+            )}
+
+            {step === 2 && !completed && (
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+              >
                 <Section title="Thông tin cơ bản">
                   <Input
                     label="Tên sản phẩm"
@@ -254,65 +320,87 @@ function AddProductModal({ onClose, onAdd }) {
                     onChange={handleChange}
                   />
                 </Section>
+              </motion.div>
+            )}
 
-                <div>
-                  <label className="text-sm text-gray-600 mb-3 block">
-                    Hình ảnh sản phẩm
-                  </label>
-
-                  <div className="flex gap-6 items-start">
-                    <div className="w-32 h-32 border rounded-2xl bg-gray-50 flex items-center justify-center overflow-hidden">
-                      {form.image ? (
-                        <img
-                          src={form.image}
-                          alt="preview"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <FiImage className="text-gray-400 text-4xl" />
-                      )}
-                    </div>
-
-                    <input
-                      name="image"
-                      placeholder="Dán link ảnh vào đây..."
-                      value={form.image}
-                      onChange={handleChange}
-                      className="flex-1 border px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+            {completed && (
+              <motion.div
+                key="done"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center text-center py-20"
+              >
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                  <FiCheck className="text-green-600 text-3xl" />
                 </div>
-              </>
+                <h3 className="text-xl font-semibold mb-3">
+                  Đã thêm sản phẩm thành công 🎉
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  Bạn có muốn thêm sản phẩm khác không?
+                </p>
+
+                <div className="flex gap-4">
+                  <button
+                    onClick={resetForm}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-xl"
+                  >
+                    Thêm tiếp
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="px-6 py-2 border rounded-xl"
+                  >
+                    Thoát
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* FOOTER */}
+        {!completed && (
+          <div className="flex justify-between px-8 py-5 border-t bg-gray-50">
+            {step > 1 && (
+              <button
+                onClick={() => setStep(step - 1)}
+                className="px-4 py-2 border rounded-xl flex items-center gap-2"
+              >
+                <FiArrowLeft /> Quay lại
+              </button>
+            )}
+
+            {step === 1 && (
+              <button
+                disabled={!form.type}
+                onClick={() => setStep(2)}
+                className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-xl disabled:opacity-40"
+              >
+                Tiếp
+              </button>
+            )}
+
+            {step === 2 && (
+              <button
+                onClick={handleSubmit}
+                className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-xl"
+              >
+                Hoàn thành
+              </button>
             )}
           </div>
-
-          {/* FOOTER */}
-          <div className="flex justify-end gap-3 px-8 py-5 border-t bg-gray-50 rounded-b-3xl">
-            <button
-              onClick={onClose}
-              className="px-5 py-2.5 text-sm border rounded-xl hover:bg-gray-100 transition"
-            >
-              Huỷ
-            </button>
-
-            <button
-              onClick={handleSubmit}
-              className="px-6 py-2.5 text-sm bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition shadow-md hover:shadow-lg"
-            >
-              Lưu sản phẩm
-            </button>
-          </div>
-        </motion.div>
+        )}
       </motion.div>
-    </AnimatePresence>
+    </div>
   );
 }
 
-/* ========================= COMPONENTS ========================= */
+/* COMPONENTS */
 
 function Section({ title, children }) {
   return (
-    <div>
+    <div className="mb-10">
       <h3 className="text-lg font-semibold text-gray-800 mb-5">{title}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">{children}</div>
     </div>
