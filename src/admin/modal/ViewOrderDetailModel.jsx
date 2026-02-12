@@ -1,4 +1,4 @@
-import { FiX, FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
+import { FiX, FiCheckCircle, FiClock, FiXCircle, FiEye } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
 function ViewOrderDetailsModal({ order, products = [], onClose }) {
@@ -50,29 +50,42 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
           className="bg-white w-full max-w-6xl rounded-3xl shadow-xl max-h-[95vh] flex flex-col overflow-hidden"
         >
           {/* HEADER */}
-          <div className="px-10 py-6 flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900">
-                Đơn hàng {order.code}
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">{order.createdAt}</p>
+          <div className="relative px-10 pt-8 pb-6">
+            {/* CLOSE BUTTON - TOP RIGHT */}
+            <button
+              onClick={onClose}
+              className="absolute top-6 right-6 p-2 rounded-lg hover:bg-gray-100 transition"
+            >
+              <FiX size={18} />
+            </button>
+
+            {/* TITLE SECTION */}
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                <FiEye size={18} />
+              </div>
+
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Xem chi tiết đơn hàng
+                </h2>
+
+                <p className="text-xs text-gray-500 mt-1">
+                  Đơn hàng {order.code} • {order.createdAt}
+                </p>
+
+                {/* STATUS BADGE */}
+                <span
+                  className={`inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full text-xs font-medium ${status.color}`}
+                >
+                  {status.icon}
+                  {status.label}
+                </span>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <span
-                className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium ${status.color}`}
-              >
-                {status.icon}
-                {status.label}
-              </span>
-
-              <button
-                onClick={onClose}
-                className="p-2 rounded-lg hover:bg-gray-100 transition"
-              >
-                <FiX size={18} />
-              </button>
-            </div>
+            {/* STRONG DIVIDER */}
+            <div className="-mx-10 mt-8 border-t border-gray-300"></div>
           </div>
 
           {/* BODY */}

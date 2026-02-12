@@ -219,22 +219,27 @@ function EditProductModal({ product, onClose, onUpdate }) {
           </AnimatePresence>
 
           {/* HEADER */}
-          <div className="flex items-center justify-between px-8 py-5 border-b">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-yellow-50">
-                <FiPackage className="text-yellow-600 text-lg" />
+          <div className="relative px-8 pt-6 pb-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-yellow-50">
+                  <FiPackage className="text-yellow-600 text-lg" />
+                </div>
+                <h2 className="font-semibold text-xl text-gray-800">
+                  Chỉnh sửa sản phẩm
+                </h2>
               </div>
-              <h2 className="font-semibold text-xl text-gray-800">
-                Chỉnh sửa sản phẩm
-              </h2>
+
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-lg transition"
+              >
+                <FiX size={20} />
+              </button>
             </div>
 
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <FiX size={20} />
-            </button>
+            {/* STRONG DIVIDER */}
+            <div className="-mx-8 mt-6 border-t border-gray-300"></div>
           </div>
 
           {/* CONTENT */}
