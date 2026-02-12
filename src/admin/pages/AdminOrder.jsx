@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { FiSearch, FiEye, FiShoppingBag } from "react-icons/fi";
-import { ordersMock } from "../data/adminMock";
+import { ordersMock, productsMock } from "../data/adminMock";
 import ViewOrderDetailsModal from "../modal/ViewOrderDetailModel";
 
 const statusMap = {
@@ -299,6 +299,7 @@ function AdminOrders() {
 
       <ViewOrderDetailsModal
         order={selectedOrder}
+        products={productsMock}
         onClose={() => setSelectedOrder(null)}
         onUpdateStatus={(newStatus) =>
           setSelectedOrder((prev) => ({
