@@ -23,9 +23,10 @@ function EditProductModal({ product, onClose, onUpdate }) {
     specs: product?.specs || {},
   }));
 
-  /* ========================= LOAD DATA ========================= */
+  // ✅ THÊM STATE SUCCESS
+  const [success, setSuccess] = useState(false);
 
-  /* ========================= HANDLE CHANGE ========================= */
+  /* ================= HANDLE CHANGE ================= */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -42,7 +43,7 @@ function EditProductModal({ product, onClose, onUpdate }) {
     });
   };
 
-  /* ========================= SUBMIT ========================= */
+  /* ================= SUBMIT ================= */
   const handleSubmit = () => {
     if (!form.name || !form.type || !form.price) return;
 
@@ -61,10 +62,16 @@ function EditProductModal({ product, onClose, onUpdate }) {
       stock: form.stock !== "" ? Number(form.stock) : 0,
     });
 
-    onClose();
+    // ✅ HIỆN THÔNG BÁO
+    setSuccess(true);
+
+    // ✅ DELAY RỒI MỚI ĐÓNG MODAL
+    setTimeout(() => {
+      onClose();
+    }, 800);
   };
 
-  /* ========================= RENDER TYPE ========================= */
+  /* ================= RENDER TYPE ================= */
   const renderTypeFields = () => {
     switch (form.type) {
       case "kinhmat":
@@ -160,23 +167,79 @@ function EditProductModal({ product, onClose, onUpdate }) {
           onClick={(e) => e.stopPropagation()}
           className="bg-white w-full max-w-4xl rounded-3xl shadow-xl relative max-h-[95vh] flex flex-col"
         >
+          {/* SUCCESS OVERLAY */}
+          {/* SUCCESS OVERLAY PRO */}
+          <AnimatePresence>
+            {success && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm rounded-3xl z-50"
+              >
+                <motion.div
+                  initial={{ scale: 0.8, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                  className="bg-white px-10 py-8 rounded-3xl shadow-2xl text-center w-[380px]"
+                >
+                  {/* ICON */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.1, type: "spring", stiffness: 260 }}
+                    className="w-16 h-16 mx-auto mb-5 rounded-full bg-green-100 flex items-center justify-center"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white text-xl">
+                      ✓
+                    </div>
+                  </motion.div>
+
+                  {/* TEXT */}
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    Cập nhật thành công
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-6">
+                    Thông tin sản phẩm đã được lưu lại.
+                  </p>
+
+                  {/* PROGRESS BAR */}
+                  <div className="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                      className="h-full bg-green-500"
+                    />
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* HEADER */}
-          <div className="flex items-center justify-between px-8 py-5 border-b">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-yellow-50">
-                <FiPackage className="text-yellow-600 text-lg" />
+          <div className="relative px-8 pt-6 pb-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-yellow-50">
+                  <FiPackage className="text-yellow-600 text-lg" />
+                </div>
+                <h2 className="font-semibold text-xl text-gray-800">
+                  Chỉnh sửa sản phẩm
+                </h2>
               </div>
-              <h2 className="font-semibold text-xl text-gray-800">
-                Chỉnh sửa sản phẩm
-              </h2>
+
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-lg transition"
+              >
+                <FiX size={20} />
+              </button>
             </div>
 
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <FiX size={20} />
-            </button>
+            {/* STRONG DIVIDER */}
+            <div className="-mx-8 mt-6 border-t border-gray-300"></div>
           </div>
 
           {/* CONTENT */}

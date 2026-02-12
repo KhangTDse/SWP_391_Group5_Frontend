@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { FiSearch, FiEye, FiShoppingBag } from "react-icons/fi";
-import { ordersMock } from "../data/adminMock";
+import { ordersMock, productsMock } from "../data/adminMock";
 import ViewOrderDetailsModal from "../modal/ViewOrderDetailModel";
 
 const statusMap = {
@@ -25,7 +25,6 @@ function AdminOrders() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [hoveredOrderId, setHoveredOrderId] = useState(null);
 
   const itemsPerPage = 5;
 
@@ -134,7 +133,7 @@ function AdminOrders() {
 
         {/* TABLE */}
         <div className="rounded-2xl border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto overflow-y-hidden">
             <table className="w-full table-fixed text-sm">
               <thead className="bg-gray-50">
                 <tr className="text-xs uppercase text-gray-500 border-b">
@@ -214,23 +213,43 @@ function AdminOrders() {
                         {order.createdAt}
                       </td>
                       <td className="px-6 py-4">
-                        <div
-                          className="flex justify-end relative"
-                          onMouseEnter={() => setHoveredOrderId(order.id)}
-                          onMouseLeave={() => setHoveredOrderId(null)}
-                        >
-                          <button
-                            onClick={() => setSelectedOrder(order)}
-                            className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition"
-                          >
-                            <FiEye size={16} />
-                          </button>
+                        <div className="flex justify-end">
+                          <div className="relative group">
+                            <button
+                              onClick={() => setSelectedOrder(order)}
+                              className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition"
+                            >
+                              <FiEye size={16} />
+                            </button>
 
-                          {hoveredOrderId === order.id && (
-                            <div className="absolute right-0 top-10 bg-black text-white text-xs px-3 py-1 rounded shadow-md whitespace-nowrap z-50">
+                            {/* Tooltip */}
+                            <div
+                              className="
+          pointer-events-none
+          absolute
+          right-0
+          top-full
+          mt-2
+          translate-y-1
+          opacity-0
+          group-hover:opacity-100
+          group-hover:translate-y-0
+          transition-all
+          duration-200
+          bg-gray-900
+          text-white
+          text-xs
+          px-3
+          py-1.5
+          rounded-md
+          shadow-lg
+          whitespace-nowrap
+          z-50
+        "
+                            >
                               Xem nhanh đơn hàng
                             </div>
-                          )}
+                          </div>
                         </div>
                       </td>
                     </tr>
@@ -299,6 +318,7 @@ function AdminOrders() {
 
       <ViewOrderDetailsModal
         order={selectedOrder}
+        products={productsMock}
         onClose={() => setSelectedOrder(null)}
         onUpdateStatus={(newStatus) =>
           setSelectedOrder((prev) => ({
