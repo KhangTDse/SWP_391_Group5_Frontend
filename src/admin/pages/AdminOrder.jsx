@@ -25,12 +25,13 @@ function AdminOrders() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [orders, setOrders] = useState(ordersMock);
 
   const itemsPerPage = 5;
 
   /* ================= FILTER + SORT ================= */
   const filteredOrders = useMemo(() => {
-    let result = ordersMock.filter((o) => {
+    let result = orders.filter((o) => {
       const matchText =
         o.code.toLowerCase().includes(search.toLowerCase()) ||
         o.customer.toLowerCase().includes(search.toLowerCase());
@@ -49,7 +50,7 @@ function AdminOrders() {
     }
 
     return result;
-  }, [search, status, sortOrder]);
+  }, [orders, search, status, sortOrder]);
 
   /* ================= PAGINATION ================= */
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
@@ -320,13 +321,23 @@ function AdminOrders() {
         order={selectedOrder}
         products={productsMock}
         onClose={() => setSelectedOrder(null)}
-        onUpdateStatus={(newStatus) =>
+        onUpdateStatus={(newStatus) => {
+          if (!selectedOrder) return;
+
+          // update bảng
+          setOrders((prev) =>
+            prev.map((o) =>
+              o.id === selectedOrder.id ? { ...o, status: newStatus } : o,
+            ),
+          );
+
+          // update modal
           setSelectedOrder((prev) => ({
             ...prev,
             status: newStatus,
-          }))
-        }
-      />
+          }));
+        }}
+      />s
     </div>
   );
 }

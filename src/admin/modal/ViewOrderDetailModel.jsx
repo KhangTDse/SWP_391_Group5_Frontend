@@ -1,7 +1,27 @@
 import { FiX, FiCheckCircle, FiClock, FiXCircle, FiEye } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
 
-function ViewOrderDetailsModal({ order, products = [], onClose }) {
+function ViewOrderDetailsModal({
+  order,
+  products = [],
+  onClose,
+  onUpdateStatus,
+}) {
+  // ✅ Hook luôn được gọi, không phụ thuộc order
+  const prevOrderId = useRef(null);
+
+  const [newStatus, setNewStatus] = useState(order?.status || "");
+
+  // Nếu order đổi → reset state (không dùng effect)
+  if (order?.id !== prevOrderId.current) {
+    prevOrderId.current = order?.id;
+    if (order?.status !== newStatus) {
+      setNewStatus(order?.status || "");
+    }
+  }
+
+  // ✅ Sau khi hook chạy xong mới check null
   if (!order) return null;
 
   const statusConfig = {
@@ -30,7 +50,9 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
   }, 0);
 
   const total = order.total || subtotal;
-  const status = statusConfig[order.status];
+
+  // ✅ fallback an toàn
+  const status = statusConfig[order.status] || statusConfig.pending;
 
   return (
     <AnimatePresence>
@@ -51,7 +73,6 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
         >
           {/* HEADER */}
           <div className="relative px-10 pt-8 pb-6">
-            {/* CLOSE BUTTON - TOP RIGHT */}
             <button
               onClick={onClose}
               className="absolute top-6 right-6 p-2 rounded-lg hover:bg-gray-100 transition"
@@ -59,7 +80,6 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
               <FiX size={18} />
             </button>
 
-            {/* TITLE SECTION */}
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
                 <FiEye size={18} />
@@ -74,7 +94,6 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
                   Đơn hàng {order.code} • {order.createdAt}
                 </p>
 
-                {/* STATUS BADGE */}
                 <span
                   className={`inline-flex items-center gap-2 mt-3 px-4 py-1.5 rounded-full text-xs font-medium ${status.color}`}
                 >
@@ -84,13 +103,11 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
               </div>
             </div>
 
-            {/* STRONG DIVIDER */}
             <div className="-mx-10 mt-8 border-t border-gray-300"></div>
           </div>
 
           {/* BODY */}
           <div className="flex-1 overflow-y-auto px-10 pb-10 grid grid-cols-3 gap-16">
-            {/* LEFT - PRODUCTS */}
             <div className="col-span-2 space-y-8">
               <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
                 Sản phẩm
@@ -143,9 +160,7 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
               </div>
             </div>
 
-            {/* RIGHT - SUMMARY + CUSTOMER */}
             <div className="space-y-10">
-              {/* PAYMENT */}
               <div className="bg-gray-50 p-8 rounded-2xl">
                 <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-6">
                   Thanh toán
@@ -171,7 +186,6 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
                 </div>
               </div>
 
-              {/* CUSTOMER INFO (NHỎ GỌN) */}
               <div>
                 <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-4">
                   Khách hàng
@@ -196,7 +210,31 @@ function ViewOrderDetailsModal({ order, products = [], onClose }) {
           </div>
 
           {/* FOOTER */}
-          <div className="px-10 py-5 flex justify-end">
+          <div className="px-10 py-5 border-t border-gray-200 flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <select
+                value={newStatus}
+                onChange={(e) => setNewStatus(e.target.value)}
+                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="pending">Chờ xử lý</option>
+                <option value="completed">Hoàn thành</option>
+                <option value="cancelled">Đã huỷ</option>
+              </select>
+
+              <button
+                disabled={newStatus === order.status}
+                onClick={() => onUpdateStatus(newStatus)}
+                className={`px-4 py-2 text-sm rounded-lg text-white transition ${
+                  newStatus === order.status
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:opacity-90"
+                }`}
+              >
+                Cập nhật
+              </button>
+            </div>
+
             <button
               onClick={onClose}
               className="px-6 py-2.5 bg-gray-900 text-white rounded-xl hover:opacity-90 transition"
