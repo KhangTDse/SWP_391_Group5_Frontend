@@ -94,7 +94,7 @@ function AdminSidebar({ collapsed }) {
       className="h-screen bg-white border-r border-slate-200 shadow-sm flex flex-col overflow-visible"
     >
       {/* ===== BRAND ===== */}
-      <div className="h-20 flex items-center border-b border-slate-200 px-4 bg-white">
+      <div className="h-20 flex items-center  px-4 bg-white">
         <motion.div layout className="flex items-center gap-3 w-full">
           <img
             src="https://tse1.mm.bing.net/th/id/OIP.VNNzIRDW9nZsWGt1vmCCXwHaFL?rs=1&pid=ImgDetMain&o=7&rm=3"
@@ -125,13 +125,23 @@ function AdminSidebar({ collapsed }) {
       {/* ===== MENU ===== */}
       <div className="flex-1 pt-5 pb-4 px-3 space-y-3">
         <div className="h-5 flex items-center px-1 text-slate-400">
-          {collapsed ? (
+          {collapsed && (
             <FiMoreHorizontal size={16} className="mx-auto opacity-70" />
-          ) : (
+          )}
+
+          <motion.div
+            initial={false}
+            animate={{
+              width: collapsed ? 0 : "auto",
+              opacity: collapsed ? 0 : 1,
+            }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden whitespace-nowrap"
+          >
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">
               Quản lý
             </p>
-          )}
+          </motion.div>
         </div>
 
         <div className="space-y-1.5 mt-1">
