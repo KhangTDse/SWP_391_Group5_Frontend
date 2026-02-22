@@ -1,170 +1,104 @@
 import { useState } from "react";
+import HeaderBar from "../components/prescription/HeaderBar";
+import FrameSummary from "../components/prescription/FrameSummary";
+import PrescriptionTable from "../components/prescription/PrescriptionTable";
+import PDSection from "../components/prescription/PDSection";
+import ExtrasSection from "../components/prescription/ExtrasSection";
+import SubmitBar from "../components/prescription/SubmitBar";
 
 export default function PrescriptionPage() {
-  const [mode, setMode] = useState("manual"); // manual | upload
-  const [file, setFile] = useState(null);
-  const [errors, setErrors] = useState({});
-
-  const [prescription, setPrescription] = useState({
-    rightSPH: "",
-    leftSPH: "",
-    rightCYL: "",
-    leftCYL: "",
-    rightAxis: "",
-    leftAxis: "",
+  const [form, setForm] = useState({
+    right: { sph:"", cyl:"", axis:"", add:"" },
+    left:  { sph:"", cyl:"", axis:"", add:"" },
     pd: "",
+    twoPD: false,
+    prism: false,
+    savePrescription: false
   });
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setPrescription(prev => ({ ...prev, [name]: value }));
+  const [errors, setErrors] = useState({});
+
+  /* ---------- UPDATE HELPERS ---------- */
+
+  const updateEye = (eye, field, value) => {
+    setForm(prev => ({
+      ...prev,
+      [eye]: { ...prev[eye], [field]: value }
+    }));
   };
 
-  const validateManual = () => {
-    const errs = {};
-    if (!prescription.rightSPH) errs.rightSPH = "Required";
-    if (!prescription.leftSPH) errs.leftSPH = "Required";
-    if (!prescription.pd) errs.pd = "Required";
-    return errs;
+  const updateField = (field, value) => {
+    setForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const validateUpload = () => {
-    const errs = {};
-    if (!file) errs.file = "Please upload your prescription";
-    return errs;
+  /* ---------- VALIDATION ---------- */
+
+  const validate = () => {
+    const e = {};
+
+    if (!form.right.sph) e.rightSph = "Required";
+    if (!form.left.sph) e.leftSph = "Required";
+    if (!form.pd) e.pd = "Required";
+
+    if (form.right.cyl && !form.right.axis)
+      e.rightAxis = "Axis required if CYL entered";
+
+    if (form.left.cyl && !form.left.axis)
+      e.leftAxis = "Axis required if CYL entered";
+
+    return e;
   };
 
-  const handleNext = () => {
-    const validationErrors =
-      mode === "manual" ? validateManual() : validateUpload();
+  const handleSubmit = () => {
+    const v = validate();
+    setErrors(v);
 
-    setErrors(validationErrors);
+    if (Object.keys(v).length > 0) return;
 
-    if (Object.keys(validationErrors).length === 0) {
-      // Save draft later
-      console.log("Prescription valid");
-    }
+    const payload = {
+      prescription: form,
+      frameId: "FRAME123"
+    };
+
+    console.log("SUBMITTING", payload);
   };
+
+  const isValid = Object.keys(validate()).length === 0;
 
   return (
-    <div className="min-h-screen px-8 py-10 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">
-        Prescription Details
-      </h1>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
 
-      {/* Mode Switch */}
-      <div className="flex gap-4 mb-6">
-        <button
-          onClick={() => setMode("manual")}
-          className={`px-4 py-2 rounded border
-            ${mode === "manual" ? "bg-blue-600 text-white" : ""}
-          `}
-        >
-          Enter Manually
-        </button>
+      <HeaderBar />
 
-        <button
-          onClick={() => setMode("upload")}
-          className={`px-4 py-2 rounded border
-            ${mode === "upload" ? "bg-blue-600 text-white" : ""}
-          `}
-        >
-          Upload Prescription
-        </button>
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-8 px-8 py-6 flex-1">
 
-      {/* Manual Entry */}
-      {mode === "manual" && (
-        <>
-          <EyeSection
-            title="Right Eye (OD)"
-            prefix="right"
-            values={prescription}
+        <FrameSummary />
+
+        <div>
+          <h1 className="text-2xl font-semibold mb-6">
+            Enter Your Prescription
+          </h1>
+
+          <PrescriptionTable
+            form={form}
             errors={errors}
-            onChange={handleChange}
+            updateEye={updateEye}
           />
-          <EyeSection
-            title="Left Eye (OS)"
-            prefix="left"
-            values={prescription}
+
+          <PDSection
+            form={form}
             errors={errors}
-            onChange={handleChange}
+            updateField={updateField}
           />
 
-          <Input
-            label="Pupillary Distance (PD)"
-            name="pd"
-            value={prescription.pd}
-            error={errors.pd}
-            onChange={handleChange}
+          <ExtrasSection
+            form={form}
+            updateField={updateField}
           />
-        </>
-      )}
-
-      {/* Upload */}
-      {mode === "upload" && (
-        <div className="mb-6">
-          <label className="block mb-2 font-medium">
-            Upload Prescription (PDF, JPG, PNG)
-          </label>
-
-          <input
-            type="file"
-            accept=".pdf,image/*"
-            onChange={e => setFile(e.target.files[0])}
-            className="block"
-          />
-
-          {errors.file && (
-            <p className="text-red-600 text-sm mt-1">
-              {errors.file}
-            </p>
-          )}
         </div>
-      )}
-
-      <div className="flex justify-end mt-8">
-        <button
-          onClick={handleNext}
-          className="bg-blue-600 text-white px-6 py-2 rounded"
-        >
-          Next
-        </button>
       </div>
-    </div>
-  );
-}
 
-/* ---------- Reusable components ---------- */
-
-function EyeSection({ title, prefix, values, errors, onChange }) {
-  return (
-    <div className="mb-6">
-      <h2 className="font-medium mb-2">{title}</h2>
-      <div className="grid grid-cols-3 gap-4">
-        <Input label="SPH" name={`${prefix}SPH`} value={values[`${prefix}SPH`]} error={errors[`${prefix}SPH`]} onChange={onChange} />
-        <Input label="CYL" name={`${prefix}CYL`} value={values[`${prefix}CYL`]} onChange={onChange} />
-        <Input label="AXIS" name={`${prefix}Axis`} value={values[`${prefix}Axis`]} onChange={onChange} />
-      </div>
-    </div>
-  );
-}
-
-function Input({ label, error, ...props }) {
-  return (
-    <div>
-      <label className="block text-sm mb-1">{label}</label>
-      <input
-        type="number"
-        step="0.25"
-        className={`w-full border rounded px-3 py-2 ${
-          error ? "border-red-500" : ""
-        }`}
-        {...props}
-      />
-      {error && (
-        <p className="text-red-600 text-sm mt-1">{error}</p>
-      )}
+      <SubmitBar onSubmit={handleSubmit} disabled={!isValid}/>
     </div>
   );
 }
