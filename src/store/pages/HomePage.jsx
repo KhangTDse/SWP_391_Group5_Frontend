@@ -11,7 +11,7 @@ import {
   FiX,
   FiChevronLeft,
   FiChevronRight,
-  FiArrowRight, FiShoppingBag,
+  FiArrowRight, FiShoppingBag, FiLock, FiCheck
 } from "react-icons/fi";
 
 //mock data thay bằng api sau này
