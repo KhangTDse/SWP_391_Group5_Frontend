@@ -105,7 +105,7 @@ function Header() {
                     onClick={() => navigate('/login')}
                     className="bg-black text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-amber-600 transition-all shadow-md"
                 >
-                  LOGIN
+                  ĐĂNG NHẬP
                 </button>
             )}
           </nav>

@@ -6,12 +6,12 @@ export default function HeaderBar() {
 
       <button className="flex items-center gap-2 text-sm">
         <ArrowLeft size={18}/>
-        Back
+        Quay lại
       </button>
 
       <div className="flex items-center gap-2 text-sm text-gray-600">
         <HelpCircle size={16}/>
-        Learn how to read your prescription
+        Tìm hiểu thêm về đơn thuốc điện tử
       </div>
 
       <button>

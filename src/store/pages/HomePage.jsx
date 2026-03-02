@@ -9,19 +9,19 @@ import glassesImg2 from "../image/getty-images-t00PsxNOJrg-unsplash.jpg";
 const sliderData = [
   {
     id: 1,
-    title: "Modern Eyewear Collection",
+    title: "Bộ sưu tập kính mắt hiện đại",
     desc: "Thiết kế tối giản, tinh tế cho sự thoải mái hàng ngày.",
     image: glassesImg2,
   },
   {
     id: 2,
-    title: "Premium Optical Experience",
+    title: "Trải nghiệm quang học cao cấp",
     desc: "Trải nghiệm hình ảnh rõ nét với tròng kính công nghệ cao.",
     image: glassesImg1,
   },
   {
     id: 3,
-    title: "Seasonal Limited Selection",
+    title: "Bộ sưu tập giới hạn theo mùa",
     desc: "Bộ sưu tập giới hạn dành riêng cho mùa hè này.",
     image: glassesImg,
   },
@@ -123,7 +123,7 @@ function HomePage() {
 
           <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-24 max-w-4xl text-white">
           <span className="text-amber-400 font-bold tracking-widest uppercase mb-2 text-sm md:text-base animate-fadeIn">
-            New Collection 2026
+            Bộ sưu tập mới 2026
           </span>
             <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
               {sliderData[current].title}

@@ -36,15 +36,15 @@ export default function PrescriptionPage() {
   const validate = () => {
     const e = {};
 
-    if (!form.right.sph) e.rightSph = "Required";
-    if (!form.left.sph) e.leftSph = "Required";
-    if (!form.pd) e.pd = "Required";
+    if (!form.right.sph) e.rightSph = "Bắt buộc";
+    if (!form.left.sph) e.leftSph = "Bắt buộc";
+    if (!form.pd) e.pd = "Bắt buộc";
 
     if (form.right.cyl && !form.right.axis)
-      e.rightAxis = "Axis required if CYL entered";
+      e.rightAxis = "Trục cần thiết nếu nhập CYL";
 
     if (form.left.cyl && !form.left.axis)
-      e.leftAxis = "Axis required if CYL entered";
+      e.leftAxis = "Trục cần thiết nếu nhập CYL";
 
     return e;
   };
@@ -76,7 +76,7 @@ export default function PrescriptionPage() {
 
         <div>
           <h1 className="text-2xl font-semibold mb-6">
-            Enter Your Prescription
+            Nhập đơn thuốc của bạn
           </h1>
 
           <PrescriptionTable
