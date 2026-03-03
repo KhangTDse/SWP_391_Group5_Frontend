@@ -14,9 +14,9 @@ import FrameSelectionPage from "./store/pages/FrameSelectionPage";
 import PrescriptionPage from "./store/pages/PrescriptionPage";
 import CartPage from "./store/pages/CartPage";
 import CheckoutPage from "./store/pages/CheckoutPage";
-import PaymentPage from "./store/pages/PaymentPage";
 import OrderSuccessPage from "./store/pages/OrderSuccessPage";
 import AdminProfile from "./admin/pages/AdminProfile.jsx";
+import AdminPrescription from "./admin/pages/AdminPrescription.jsx";
 
 function App() {
   return (
@@ -26,6 +26,8 @@ function App() {
       <Routes>
         <Route element={<StoreLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<HomePage />} />
+          <Route path="/contact" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
@@ -34,7 +36,6 @@ function App() {
           <Route path="/prescription" element={<PrescriptionPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
           <Route path="/order-success" element={<OrderSuccessPage />} />
         </Route>
         <Route element={<AdminLayout />}>
@@ -42,6 +43,7 @@ function App() {
           <Route path="/dashboard/profile" element={<AdminProfile />} />
           <Route path="/dashboard/products" element={<AdminProducts />} />
           <Route path="/dashboard/orders" element={<AdminOrders />} />
+          <Route path="/dashboard/prescriptions" element={<AdminPrescription />} />
         </Route>
       </Routes>
     </div>
