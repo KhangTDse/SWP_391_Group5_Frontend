@@ -1,12 +1,11 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { FiShoppingBag } from "react-icons/fi";
+import { FiShoppingBag, FiClipboard } from "react-icons/fi"; // Thêm FiClipboard
 import { FaCopyright } from "react-icons/fa";
 
 function Header() {
   const navigate = useNavigate();
 
-  // Đã xóa "Đơn Hàng" ra khỏi menu
   const MENU_ITEMS = [
     { label: "Cửa Hàng", path: "/shop" },
     { label: "Về chúng tôi", path: "/about" },
@@ -24,7 +23,6 @@ function Header() {
 
   const userRef = useRef(null);
 
-  // Vẫn giữ lại biến tính tổng số lượng để hiện thị bong bóng đỏ trên túi xách
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0);
 
   /* sync storage events */
@@ -92,7 +90,7 @@ function Header() {
           </Link>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.2em] font-semibold text-stone-600">
+          <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-xs uppercase tracking-[0.2em] font-semibold text-stone-600">
             {MENU_ITEMS.map((item) => (
               <NavLink
                 key={item.path}
@@ -112,32 +110,44 @@ function Header() {
               </NavLink>
             ))}
 
-            {/* ── CART BUTTON ── */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  navigate("/checkout"); // Bay thẳng sang trang thanh toán
-                  setShowUserMenu(false);
-                }}
-                className="relative p-2 rounded-full hover:bg-stone-100 transition-colors"
+            {/* CỤM NÚT BÊN PHẢI (Lịch sử đơn hàng + Giỏ hàng) */}
+            <div className="flex items-center gap-5 ml-2 border-l border-stone-200 pl-6">
+              
+              {/* ── NÚT LỊCH SỬ ĐƠN HÀNG ── */}
+              <Link 
+                to="/my-orders" 
+                className="flex items-center gap-1.5 text-stone-500 hover:text-amber-500 transition-colors group"
+                title="Đơn hàng của bạn"
               >
-                <FiShoppingBag size={18} className="text-stone-700" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-amber-500 text-white text-[10px] font-bold w-4.5 h-4.5 min-w-[18px] min-h-[18px] flex items-center justify-center rounded-full shadow">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
+                <FiClipboard size={18} className="group-hover:-translate-y-0.5 transition-transform" />
+                <span className="mt-0.5">Đơn hàng</span>
+              </Link>
+
+              {/* ── CART BUTTON ── */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    navigate("/checkout");
+                    setShowUserMenu(false);
+                  }}
+                  className="relative p-2 rounded-full hover:bg-stone-100 hover:text-amber-500 transition-colors"
+                >
+                  <FiShoppingBag size={18} />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 bg-amber-500 text-white text-[10px] font-bold w-4.5 h-4.5 min-w-[18px] min-h-[18px] flex items-center justify-center rounded-full shadow">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* USER */}
             {currentUser ? (
               <div className="relative" ref={userRef}>
                 <button
-                  onClick={() => {
-                    setShowUserMenu((p) => !p);
-                  }}
-                  className="flex items-center gap-2"
+                  onClick={() => setShowUserMenu((p) => !p)}
+                  className="flex items-center gap-2 ml-2"
                 >
                   <img
                     src={`https://ui-avatars.com/api/?name=${currentUser.name || currentUser.email}&background=1c1917&color=fff&bold=true`}
@@ -152,14 +162,23 @@ function Header() {
                       <p className="text-xs font-medium text-stone-700 truncate">
                         {currentUser.name || "Người dùng"}
                       </p>
-                      <p className="text-[11px] text-stone-400 truncate mt-0.5">
+                      <p className="text-[11px] text-stone-400 truncate mt-0.5 lowercase tracking-normal">
                         {currentUser.email}
                       </p>
                     </div>
-                    {/* Bạn có thể thêm link Lịch sử đơn hàng vào đây nếu muốn */}
+                    
+                    {/* Link đơn hàng trong dropdown cho chắc ăn */}
+                    <Link
+                      to="/my-orders"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2.5 text-sm text-stone-600 hover:bg-stone-50 hover:text-amber-500 transition-colors tracking-normal font-medium capitalize border-b border-stone-50"
+                    >
+                      Đơn hàng của tôi
+                    </Link>
+
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-stone-50 transition-colors"
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors tracking-normal font-medium capitalize"
                     >
                       Đăng xuất
                     </button>
@@ -169,25 +188,35 @@ function Header() {
             ) : (
               <button
                 onClick={() => navigate("/login")}
-                className="bg-stone-900 text-white px-5 py-2 rounded-full text-xs font-semibold tracking-wider hover:bg-amber-500 transition-all duration-300"
+                className="bg-stone-900 text-white px-5 py-2 rounded-full text-xs font-semibold tracking-wider hover:bg-amber-500 transition-all duration-300 ml-2"
               >
                 Đăng nhập
               </button>
             )}
           </nav>
 
-          {/* MOBILE NAV*/}
-          <button 
-            onClick={() => navigate("/checkout")} 
-            className="md:hidden text-stone-700 p-2 relative"
-          >
-            <FiShoppingBag size={20} />
-            {cartCount > 0 && (
-              <span className="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 min-w-[16px] min-h-[16px] flex items-center justify-center rounded-full shadow">
-                {cartCount}
-              </span>
-            )}
-          </button>
+          {/* MOBILE NAV */}
+          <div className="md:hidden flex items-center gap-3">
+            <Link 
+              to="/my-orders" 
+              className="text-stone-600 hover:text-amber-500 p-2"
+            >
+              <FiClipboard size={20} />
+            </Link>
+
+            <button 
+              onClick={() => navigate("/checkout")} 
+              className="text-stone-700 p-2 relative"
+            >
+              <FiShoppingBag size={20} />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-bold w-4 h-4 min-w-[16px] min-h-[16px] flex items-center justify-center rounded-full shadow">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </div>
+
         </div>
       </header>
     </>
