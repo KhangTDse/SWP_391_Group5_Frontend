@@ -21,6 +21,7 @@ import ContactPage from "./store/pages/ContactPage.jsx";
 import ShippingProgressPage from "./store/pages/ShippingProgressPage.jsx";
 import OrderFeedbackPage from "./store/pages/OrderFeedbackPage.jsx";
 import ReturnFormPage from "./store/pages/ReturnFormPage.jsx";
+import OrderHistoryPage from "./store/pages/OrderHistoryPage.jsx";
 function App() {
   return (
     <div>
@@ -43,6 +44,7 @@ function App() {
           <Route path="/shipping-progress" element={<ShippingProgressPage />} />
           <Route path="/order-feedback" element={<OrderFeedbackPage />} />
           <Route path="/return-request" element={<ReturnFormPage />} />
+          <Route path="/my-orders" element={<OrderHistoryPage />} />
 
         </Route>
         <Route element={<AdminLayout />}>
