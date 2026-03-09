@@ -269,14 +269,12 @@ function ProductDetailPage() {
               </div>
 
             <div> 
-           
               {product.category === "frame" && (
                 <FramePurchaseOptions product={product} />
               )} 
               {product.category === "lens" && (
                 <LensPurchaseOptions product={product} />
               )} 
-
 
             </div>
 

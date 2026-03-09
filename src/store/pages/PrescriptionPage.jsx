@@ -1,12 +1,27 @@
 import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import HeaderBar from "../components/prescription/Headerbar";
 import FrameSummary from "../components/prescription/FrameSummary";
 import PrescriptionTable from "../components/prescription/PrescriptionTable";
 import PDSection from "../components/prescription/PDSection";
 import ExtrasSection from "../components/prescription/ExtrasSection";
 import SubmitBar from "../components/prescription/SubmitBar";
+import { products } from "../data/shopMock";
 
 export default function PrescriptionPage() {
+
+    const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Tìm sản phẩm theo id từ URL, fallback về null nếu không tìm thấy
+  const raw = products.find((p) => String(p.id) === String(id));
+
+  // Nếu không tìm thấy → về trang shop
+  if (!raw) {
+    navigate("/shop");
+    return null;
+  }
+
   const [form, setForm] = useState({
     right: { sph:"", cyl:"", axis:"", add:"" },
     left:  { sph:"", cyl:"", axis:"", add:"" },

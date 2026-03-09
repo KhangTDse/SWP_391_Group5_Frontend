@@ -8,7 +8,6 @@ function Header() {
 
   const MENU_ITEMS = [
     { label: "Cửa Hàng", path: "/shop" },
-    { label: "Đơn Hàng", path: "/prescription" },
     { label: "Về chúng tôi", path: "/about" },
     { label: "Liên hệ", path: "/contact" },
   ];
